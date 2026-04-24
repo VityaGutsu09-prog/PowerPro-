@@ -23,5 +23,5 @@ app.post('/api/generate', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
+app.use(express.static('public'));
 app.listen(process.env.PORT || 3000);
