@@ -90,7 +90,7 @@ async function generate(){
   document.getElementById('igCard').style.display='none';
   const types={promo:'рекламный',educational:'информационный',motivational:'мотивационный',product:'обзор продукта'};
   const system='Ты контент-менеджер PowerPro (спортпит, Россия). Отвечай ТОЛЬКО валидным JSON без markdown.';
-  const prompt=`Создай ${types[type]} контент для ВКонтакте и Instagram.\nПродукт: ${topic}\n${extra?'Детали: '+extra:''}\nJSON: {"vk":{"post":"текст поста","hashtags":["#тег1","#тег2","#тег3","#тег4","#тег5"]},"ig":{"caption":"caption текст","reels_script":"сценарий по секундам","hashtags":["#tag1","#tag2","#tag3","#tag4","#tag5"]},"image_prompt":"prompt for image generation in English, sports nutrition style, professional photo"}`;
+  const prompt=`Создай ${types[type]} контент для ВКонтакте и Instagram.\nПродукт: ${topic}\n${extra?'Детали: '+extra:''}\nJSON: {"vk":{"post":"текст поста","hashtags":["#тег1","#тег2","#тег3","#тег4","#тег5"]},"ig":{"caption":"caption текст","reels_script":"сценарий по секундам","hashtags":["#tag1","#tag2","#tag3","#tag4","#tag5"]},"image_prompt":"название продукта на русском для подбора фото"}`;
   try{
     const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,system,messages:[{role:'user',content:prompt}]})});
     const data=await res.json();
@@ -118,49 +118,60 @@ async function generate(){
   document.getElementById('loader').style.display='none';
 }
 
+function addLogoToImage(srcUrl, isBase64, base64data){
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  const img=new Image();
+  img.crossOrigin='anonymous';
+  img.onload=function(){
+    canvas.width=img.width;
+    canvas.height=img.height;
+    ctx.drawImage(img,0,0);
+    const logo=new Image();
+    logo.crossOrigin='anonymous';
+    logo.onload=function(){
+      const lw=img.width*0.35;
+      const lh=logo.height*(lw/logo.width);
+      ctx.drawImage(logo,img.width-lw-20,img.height-lh-20,lw,lh);
+      const final=canvas.toDataURL('image/jpeg',0.95);
+      generatedImageBase64=final.split(',')[1];
+      document.getElementById('imgPreview').src=final;
+      document.getElementById('imgPreview').style.display='block';
+      document.getElementById('vkBtn').style.display='block';
+      document.getElementById('imgBtn').disabled=false;
+      document.getElementById('imgLoader').style.display='none';
+    };
+    logo.onerror=function(){
+      const final=canvas.toDataURL('image/jpeg',0.95);
+      generatedImageBase64=final.split(',')[1];
+      document.getElementById('imgPreview').src=final;
+      document.getElementById('imgPreview').style.display='block';
+      document.getElementById('vkBtn').style.display='block';
+      document.getElementById('imgBtn').disabled=false;
+      document.getElementById('imgLoader').style.display='none';
+    };
+    logo.src='https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png';
+  };
+  img.src=isBase64?'data:image/png;base64,'+base64data:srcUrl;
+}
+
 async function generateImage(){
   document.getElementById('imgBtn').disabled=true;
   document.getElementById('imgLoader').style.display='block';
-  const prompt=window._imagePrompt||'Professional sports nutrition protein shake, gym aesthetic, red and black colors, high quality photo';
+  const topic=document.getElementById('topic').value.trim();
+  const prompt=window._imagePrompt||topic||'протеин';
   try{
     const res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
     const data=await res.json();
-    if(data.artifacts&&data.artifacts[0]){
-      const base64=data.artifacts[0].base64;
-      const canvas=document.createElement('canvas');
-      const ctx=canvas.getContext('2d');
-      const img=new Image();
-      img.onload=function(){
-        canvas.width=img.width;
-        canvas.height=img.height;
-        ctx.drawImage(img,0,0);
-        const logo=new Image();
-        logo.crossOrigin='anonymous';
-        logo.onload=function(){
-          const lw=img.width*0.35;
-          const lh=logo.height*(lw/logo.width);
-          ctx.drawImage(logo,img.width-lw-20,img.height-lh-20,lw,lh);
-          const final=canvas.toDataURL('image/jpeg',0.95);
-          generatedImageBase64=final.split(',')[1];
-          document.getElementById('imgPreview').src=final;
-          document.getElementById('imgPreview').style.display='block';
-          document.getElementById('vkBtn').style.display='block';
-          document.getElementById('imgBtn').disabled=false;
-          document.getElementById('imgLoader').style.display='none';
-        };
-        logo.onerror=function(){
-          generatedImageBase64=base64;
-          document.getElementById('imgPreview').src='data:image/png;base64,'+base64;
-          document.getElementById('imgPreview').style.display='block';
-          document.getElementById('vkBtn').style.display='block';
-          document.getElementById('imgBtn').disabled=false;
-          document.getElementById('imgLoader').style.display='none';
-        };
-        logo.src='https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png';
-      };
-      img.src='data:image/png;base64,'+base64;
+    if(data.productImage){
+      addLogoToImage(data.productImage, false, null);
       return;
-    }else{throw new Error('Нет картинки в ответе');}
+    } else if(data.artifacts&&data.artifacts[0]){
+      addLogoToImage(null, true, data.artifacts[0].base64);
+      return;
+    } else {
+      throw new Error('Нет картинки в ответе');
+    }
   }catch(e){alert('Ошибка картинки: '+e.message);}
   document.getElementById('imgBtn').disabled=false;
   document.getElementById('imgLoader').style.display='none';
