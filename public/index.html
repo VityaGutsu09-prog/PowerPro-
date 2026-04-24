@@ -79,9 +79,7 @@ async function generate(){
   const prompt=`Создай ${types[type]} контент для ВКонтакте и Instagram.\nПродукт: ${topic}\n${extra?'Детали: '+extra:''}\nJSON: {"vk":{"post":"текст поста","hashtags":["#тег1","#тег2","#тег3","#тег4","#тег5"]},"ig":{"caption":"caption текст","reels_script":"сценарий по секундам","hashtags":["#tag1","#tag2","#tag3","#tag4","#tag5"]}}`;
   try{
     const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    const raw=data.content.map(i=>i.text||'').join('').trim().replace(/^```[a-z]*\n?/i,'').replace(/```$/,'').trim();
-    const d=JSON.parse(raw);
+  const data=await res.json();if(data.error){throw new Error(JSON.stringify(data.error));}const raw=(data.content||[]).map(i=>i.text||'').join('').trim().replace(/^```[a-z]*\n?/i,'').replace(/```$/,'').trim();const d=JSON.parse(raw);
     if(d.vk){
       document.getElementById('vkPost').textContent=d.vk.post;
       document.getElementById('vkPost').style.display='block';
