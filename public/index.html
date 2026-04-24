@@ -123,15 +123,66 @@ function addLogoToImage(srcUrl, isBase64, base64data){
   const img=new Image();
   img.crossOrigin='anonymous';
   img.onload=function(){
-    canvas.width=img.width;
-    canvas.height=img.height;
-    ctx.drawImage(img,0,0);
+    const W=1080;
+    const H=1080;
+    canvas.width=W;
+    canvas.height=H;
+
+    // Тёмный фон с градиентом
+    const bgGrad=ctx.createRadialGradient(W*0.3,H*0.3,0,W*0.5,H*0.5,W*0.8);
+    bgGrad.addColorStop(0,'#1a0a0a');
+    bgGrad.addColorStop(0.5,'#0d0d0d');
+    bgGrad.addColorStop(1,'#000000');
+    ctx.fillStyle=bgGrad;
+    ctx.fillRect(0,0,W,H);
+
+    // Красный акцент снизу
+    const redGrad=ctx.createLinearGradient(0,H*0.7,0,H);
+    redGrad.addColorStop(0,'rgba(232,0,29,0)');
+    redGrad.addColorStop(1,'rgba(232,0,29,0.25)');
+    ctx.fillStyle=redGrad;
+    ctx.fillRect(0,0,W,H);
+
+    // Жёлтый акцент сверху слева
+    const yellowGrad=ctx.createRadialGradient(0,0,0,0,0,W*0.5);
+    yellowGrad.addColorStop(0,'rgba(255,200,0,0.08)');
+    yellowGrad.addColorStop(1,'rgba(255,200,0,0)');
+    ctx.fillStyle=yellowGrad;
+    ctx.fillRect(0,0,W,H);
+
+    // Диагональные линии в стиле бренда
+    ctx.strokeStyle='rgba(232,0,29,0.06)';
+    ctx.lineWidth=1;
+    for(let i=-H;i<W+H;i+=40){
+      ctx.beginPath();
+      ctx.moveTo(i,0);
+      ctx.lineTo(i+H,H);
+      ctx.stroke();
+    }
+
+    // Рисуем продукт по центру
+    const scale=Math.min(W*0.8/img.width, H*0.75/img.height);
+    const pw=img.width*scale;
+    const ph=img.height*scale;
+    const px=(W-pw)/2;
+    const py=(H-ph)/2 - 30;
+
+    // Тень под продуктом
+    ctx.shadowColor='rgba(0,0,0,0.8)';
+    ctx.shadowBlur=60;
+    ctx.shadowOffsetY=30;
+    ctx.drawImage(img,px,py,pw,ph);
+    ctx.shadowColor='transparent';
+    ctx.shadowBlur=0;
+    ctx.shadowOffsetY=0;
+
+    // Логотип
     const logo=new Image();
     logo.crossOrigin='anonymous';
     logo.onload=function(){
-      const lw=img.width*0.35;
+      const lw=W*0.3;
       const lh=logo.height*(lw/logo.width);
-      ctx.drawImage(logo,img.width-lw-20,img.height-lh-20,lw,lh);
+      ctx.drawImage(logo,W-lw-24,H-lh-24,lw,lh);
       const final=canvas.toDataURL('image/jpeg',0.95);
       generatedImageBase64=final.split(',')[1];
       document.getElementById('imgPreview').src=final;
