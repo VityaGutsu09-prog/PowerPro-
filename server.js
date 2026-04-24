@@ -8,44 +8,44 @@ app.use(cors());
 app.use(express.json({limit: '10mb'}));
 app.use(express.static('public'));
 
-const PRODUCTS = {
-  'zero-strawberry': { file: 'IMG_0107.png', keywords: ['zero', 'зеро', 'клубника', 'strawberry'] },
-  'zero-chocolate': { file: 'IMG_0090.png', keywords: ['zero шоколад', 'зеро шоколад', 'chocolate cookie'] },
-  'zero-pear': { file: 'IMG_0407.png', keywords: ['zero груша', 'зеро груша', 'pear', 'груша'] },
-  'zero-vanilla': { file: 'IMG_0408.png', keywords: ['zero ваниль', 'зеро ваниль', 'vanilla cream'] },
-  'zero-coconut': { file: 'IMG_0409.png', keywords: ['zero кокос', 'зеро кокос', 'coconut'] },
-  'twins-lemon': { file: 'IMG_0161.png', keywords: ['twins лимон', 'твинс лимон', 'lemon cookie'] },
-  'twins-coffee': { file: 'IMG_0261.png', keywords: ['twins кофе', 'твинс кофе', 'coffee cookie'] },
-  'twins-vanilla': { file: 'IMG_3913.png', keywords: ['twins ваниль', 'твинс ваниль', 'vanilla cookie'] },
-  'twins-chocolate': { file: 'IMG_3914.png', keywords: ['twins шоколад', 'твинс шоколад', 'chocolate cookie twins'] },
-  'bar-almond': { file: 'IMG_0214.png', keywords: ['36%', '36 процент', 'миндаль', 'арахис', 'almond', 'peanut'] },
-  'bar-pistachio': { file: 'IMG_0217.png', keywords: ['фисташк', 'ананас', 'pistachio', 'pineapple'] },
-  'bar-hazelnut': { file: 'IMG_0211.png', keywords: ['фундук', 'изюм', 'hazelnut', 'raisin'] },
-  'vegan': { file: 'IMG_0240.png', keywords: ['vegan', 'веган', 'choconuts'] },
-  'prometheus': { file: 'IMG_0239.png', keywords: ['prometheus', 'прометеус', 'прометей'] },
-  'coco-joy': { file: 'IMG_2029.webp', keywords: ['coco', 'кокос джой', 'coco joy'] },
-  'tortik-choco-coconut': { file: 'IMG_3905.webp', keywords: ['тортик шоколад кокос', 'tortik chocolate coconut'] },
-  'tortik-coconut': { file: 'IMG_3906.webp', keywords: ['тортик кокос', 'tortik coconut caramel'] },
-  'tortik-peanut': { file: 'IMG_3908.webp', keywords: ['тортик арахис', 'tortik peanut'] },
-  'tortik-walnut': { file: 'IMG_3909.webp', keywords: ['тортик грецкий', 'tortik walnut', 'latte'] },
-  'tortik-pistachio': { file: 'IMG_3911.webp', keywords: ['тортик фисташк', 'tortik pistachio', 'cherry'] },
-  'tortik-hazelnut': { file: 'IMG_3912.png', keywords: ['тортик фундук', 'tortik hazelnut chocolate'] },
-  'whey-banana': { file: 'IMG_1228.png', keywords: ['whey', 'вей', 'протеин банан', 'protein banana', 'whey protein'] },
-  'whey-vanilla': { file: 'IMG_1227.png', keywords: ['протеин ваниль', 'protein vanilla', 'whey vanilla'] },
-  'gainer': { file: 'IMG_0108.jpeg', keywords: ['gainer', 'гейнер', 'gain'] },
-  'tortik': { file: 'IMG_3906.webp', keywords: ['тортик', 'tortik'] },
-  'twins': { file: 'IMG_0161.png', keywords: ['twins', 'твинс'] },
-  'zero': { file: 'IMG_0107.png', keywords: ['zero', 'зеро'] },
-  'bar': { file: 'IMG_0214.png', keywords: ['батончик', 'bar', 'бар'] },
-  'protein': { file: 'IMG_1228.png', keywords: ['протеин', 'protein', 'белок'] },
-};
+const PRODUCTS = [
+  { file: 'IMG_0409.png', keywords: ['zero кокос', 'зеро кокос', 'zero coconut', 'кокос zero', 'coconut zero'] },
+  { file: 'IMG_0407.png', keywords: ['zero груша', 'зеро груша', 'zero pear', 'груша zero'] },
+  { file: 'IMG_0408.png', keywords: ['zero ваниль', 'зеро ваниль', 'zero vanilla', 'ваниль zero'] },
+  { file: 'IMG_0090.png', keywords: ['zero шоколад', 'зеро шоколад', 'zero chocolate'] },
+  { file: 'IMG_0107.png', keywords: ['zero клубника', 'зеро клубника', 'zero strawberry', 'клубника zero'] },
+  { file: 'IMG_0261.png', keywords: ['twins кофе', 'твинс кофе', 'twins coffee'] },
+  { file: 'IMG_3913.png', keywords: ['twins ваниль', 'твинс ваниль', 'twins vanilla'] },
+  { file: 'IMG_3914.png', keywords: ['twins шоколад', 'твинс шоколад', 'twins chocolate'] },
+  { file: 'IMG_0161.png', keywords: ['twins лимон', 'твинс лимон', 'twins lemon'] },
+  { file: 'IMG_3905.webp', keywords: ['тортик шоколад кокос', 'tortik chocolate coconut'] },
+  { file: 'IMG_3906.webp', keywords: ['тортик кокос карамель', 'tortik coconut caramel'] },
+  { file: 'IMG_3908.webp', keywords: ['тортик арахис', 'tortik peanut'] },
+  { file: 'IMG_3909.webp', keywords: ['тортик грецкий', 'тортик латте', 'tortik walnut', 'tortik latte'] },
+  { file: 'IMG_3911.webp', keywords: ['тортик фисташк', 'тортик вишн', 'tortik pistachio', 'tortik cherry'] },
+  { file: 'IMG_3912.png', keywords: ['тортик фундук', 'тортик шоколад', 'tortik hazelnut'] },
+  { file: 'IMG_3906.webp', keywords: ['тортик', 'tortik'] },
+  { file: 'IMG_0217.png', keywords: ['фисташк', 'ананас', 'pistachio', 'pineapple'] },
+  { file: 'IMG_0211.png', keywords: ['фундук', 'изюм', 'hazelnut', 'raisin'] },
+  { file: 'IMG_0214.png', keywords: ['36%', '36 процент', 'миндаль', 'арахис', 'almond', 'peanut'] },
+  { file: 'IMG_0240.png', keywords: ['vegan', 'веган', 'choconuts'] },
+  { file: 'IMG_0239.png', keywords: ['prometheus', 'прометеус', 'прометей'] },
+  { file: 'IMG_2029.webp', keywords: ['coco joy', 'кокос джой', 'cocojoy'] },
+  { file: 'IMG_1227.png', keywords: ['протеин ваниль', 'whey ваниль', 'protein vanilla', 'whey vanilla'] },
+  { file: 'IMG_1228.png', keywords: ['whey', 'вей протеин', 'протеин банан', 'protein banana'] },
+  { file: 'IMG_0108.jpeg', keywords: ['gainer', 'гейнер', 'gain'] },
+  { file: 'IMG_0161.png', keywords: ['twins', 'твинс'] },
+  { file: 'IMG_0107.png', keywords: ['zero', 'зеро'] },
+  { file: 'IMG_0214.png', keywords: ['батончик', 'bar', 'бар'] },
+  { file: 'IMG_1228.png', keywords: ['протеин', 'protein', 'белок'] },
+];
 
 function getProductImage(prompt) {
   const p = prompt.toLowerCase();
-  for (const [key, product] of Object.entries(PRODUCTS)) {
+  for (const product of PRODUCTS) {
     for (const keyword of product.keywords) {
       if (p.includes(keyword)) {
-        return `/IMG_0090.png`.replace('IMG_0090.png', product.file);
+        return '/' + product.file;
       }
     }
   }
