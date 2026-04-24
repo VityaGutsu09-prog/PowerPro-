@@ -17,7 +17,6 @@ input,select,textarea{width:100%;background:#0a0a0a;border:1px solid #222;color:
 textarea{min-height:70px;resize:vertical}
 .btn{width:100%;padding:14px;background:#E8001D;color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:4px;cursor:pointer;border-radius:3px;margin-bottom:8px}
 .btn-green{background:#00cc66;color:#000}
-.btn-blue{background:#0077ff}
 .btn:disabled{opacity:0.5}
 .result{background:#0a0a0a;border:1px solid #222;border-radius:3px;padding:16px;margin-top:12px;white-space:pre-wrap;font-size:13px;line-height:1.8;color:#ccc;display:none}
 .copy-btn{background:transparent;border:1px solid #333;color:#555;font-size:9px;letter-spacing:2px;padding:4px 10px;cursor:pointer;border-radius:2px;margin-top:8px;font-family:'Montserrat',sans-serif}
@@ -127,10 +126,40 @@ async function generateImage(){
     const res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
     const data=await res.json();
     if(data.artifacts&&data.artifacts[0]){
-      generatedImageBase64=data.artifacts[0].base64;
-      document.getElementById('imgPreview').src='data:image/png;base64,'+generatedImageBase64;
-      document.getElementById('imgPreview').style.display='block';
-      document.getElementById('vkBtn').style.display='block';
+      const base64=data.artifacts[0].base64;
+      const canvas=document.createElement('canvas');
+      const ctx=canvas.getContext('2d');
+      const img=new Image();
+      img.onload=function(){
+        canvas.width=img.width;
+        canvas.height=img.height;
+        ctx.drawImage(img,0,0);
+        const logo=new Image();
+        logo.crossOrigin='anonymous';
+        logo.onload=function(){
+          const lw=img.width*0.35;
+          const lh=logo.height*(lw/logo.width);
+          ctx.drawImage(logo,img.width-lw-20,img.height-lh-20,lw,lh);
+          const final=canvas.toDataURL('image/jpeg',0.95);
+          generatedImageBase64=final.split(',')[1];
+          document.getElementById('imgPreview').src=final;
+          document.getElementById('imgPreview').style.display='block';
+          document.getElementById('vkBtn').style.display='block';
+          document.getElementById('imgBtn').disabled=false;
+          document.getElementById('imgLoader').style.display='none';
+        };
+        logo.onerror=function(){
+          generatedImageBase64=base64;
+          document.getElementById('imgPreview').src='data:image/png;base64,'+base64;
+          document.getElementById('imgPreview').style.display='block';
+          document.getElementById('vkBtn').style.display='block';
+          document.getElementById('imgBtn').disabled=false;
+          document.getElementById('imgLoader').style.display='none';
+        };
+        logo.src='https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png';
+      };
+      img.src='data:image/png;base64,'+base64;
+      return;
     }else{throw new Error('Нет картинки в ответе');}
   }catch(e){alert('Ошибка картинки: '+e.message);}
   document.getElementById('imgBtn').disabled=false;
