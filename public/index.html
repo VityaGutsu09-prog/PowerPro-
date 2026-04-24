@@ -151,52 +151,37 @@ function composeImage(productSrc, bgBase64) {
   const type = document.getElementById('type').value;
 
   const drawFinal = (bgImg, productImg) => {
-    // 1. Фон
     if (bgImg) {
       ctx.drawImage(bgImg, 0, 0, W, H);
     } else {
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, W, H);
     }
-
-    // 2. Затемнение по центру
     const dimmer = ctx.createRadialGradient(W/2, H/2, W*0.1, W/2, H/2, W*0.75);
     dimmer.addColorStop(0, 'rgba(0,0,0,0.55)');
     dimmer.addColorStop(1, 'rgba(0,0,0,0.15)');
     ctx.fillStyle = dimmer;
     ctx.fillRect(0, 0, W, H);
-
-    // 3. Оверлей по типу контента
     ctx.fillStyle = moodOverlay[type] || moodOverlay.promo;
     ctx.fillRect(0, 0, W, H);
-
-    // 4. Красный градиент снизу
     const redBottom = ctx.createLinearGradient(0, H*0.6, 0, H);
     redBottom.addColorStop(0, 'rgba(232,0,29,0)');
     redBottom.addColorStop(1, 'rgba(232,0,29,0.30)');
     ctx.fillStyle = redBottom;
     ctx.fillRect(0, 0, W, H);
-
-    // 5. Диагональные линии
     ctx.strokeStyle = 'rgba(232,0,29,0.06)';
     ctx.lineWidth = 1;
     for (let i = -H; i < W+H; i += 44) {
       ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i+H, H); ctx.stroke();
     }
-
-    // 6. Размер и позиция продукта
     const scale = Math.min(W*0.72/productImg.width, H*0.68/productImg.height);
     const pw = productImg.width*scale, ph = productImg.height*scale;
     const px = (W-pw)/2, py = (H-ph)/2 - 30;
-
-    // 7. Свечение под продуктом
     const glow = ctx.createRadialGradient(W/2, py+ph*0.8, 0, W/2, py+ph*0.8, pw*0.55);
     glow.addColorStop(0, 'rgba(232,0,29,0.25)');
     glow.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, W, H);
-
-    // 8. Продукт без белого фона
     const cleanProduct = removeWhiteBg(productImg);
     ctx.shadowColor = 'rgba(0,0,0,0.95)';
     ctx.shadowBlur = 70;
@@ -205,24 +190,11 @@ function composeImage(productSrc, bgBase64) {
     ctx.shadowColor = 'transparent';
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
-
-    // 9. Полоса снизу
     const strip = ctx.createLinearGradient(0, H*0.87, 0, H);
     strip.addColorStop(0, 'rgba(180,0,20,0)');
     strip.addColorStop(1, 'rgba(180,0,20,0.85)');
     ctx.fillStyle = strip;
     ctx.fillRect(0, H*0.87, W, H*0.13);
-
-    // 10. Текст POWERPRO
-    ctx.font = '700 54px "Bebas Neue", Impact, sans-serif';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    ctx.fillText('POWER', 36, H*0.945);
-    const pw2 = ctx.measureText('POWER').width;
-    ctx.fillStyle = '#ffcc00';
-    ctx.fillText('PRO', 36+pw2+6, H*0.945);
-
-    // 11. Логотип
     const logo = new Image();
     logo.crossOrigin = 'anonymous';
     const finalize = () => {
@@ -248,18 +220,15 @@ function composeImage(productSrc, bgBase64) {
   let bgImg = null;
   const productImg = new Image();
   productImg.crossOrigin = 'anonymous';
-
   const tryDraw = () => {
     if (productImg.complete && productImg.naturalWidth) drawFinal(bgImg, productImg);
   };
-
   if (bgBase64) {
     bgImg = new Image();
     bgImg.onload = tryDraw;
     bgImg.onerror = tryDraw;
     bgImg.src = 'data:image/png;base64,' + bgBase64;
   }
-
   productImg.onload = () => {
     if (!bgBase64 || (bgImg && bgImg.complete)) drawFinal(bgImg, productImg);
     else if (bgImg) bgImg.onload = tryDraw;
@@ -282,13 +251,6 @@ function composeGeneratedImage(base64) {
     strip.addColorStop(1, 'rgba(180,0,20,0.85)');
     ctx.fillStyle = strip;
     ctx.fillRect(0, H*0.87, W, H*0.13);
-    ctx.font = '700 54px "Bebas Neue", Impact, sans-serif';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    ctx.fillText('POWER', 36, H*0.945);
-    const pw = ctx.measureText('POWER').width;
-    ctx.fillStyle = '#ffcc00';
-    ctx.fillText('PRO', 36+pw+6, H*0.945);
     const logo = new Image();
     logo.crossOrigin = 'anonymous';
     const finalize = () => {
