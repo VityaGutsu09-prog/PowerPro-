@@ -15,13 +15,19 @@ body{background:#0d0d0d;color:#f0f0f0;font-family:'Montserrat',sans-serif;paddin
 label{display:block;font-size:9px;letter-spacing:3px;color:#E8001D;margin-bottom:8px}
 input,select,textarea{width:100%;background:#0a0a0a;border:1px solid #222;color:#f0f0f0;font-family:'Montserrat',sans-serif;font-size:13px;padding:10px;border-radius:3px;margin-bottom:12px}
 textarea{min-height:70px;resize:vertical}
-.btn{width:100%;padding:16px;background:#E8001D;color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:5px;cursor:pointer;border-radius:3px}
+.btn{width:100%;padding:14px;background:#E8001D;color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:4px;cursor:pointer;border-radius:3px;margin-bottom:8px}
+.btn-green{background:#00cc66;color:#000}
+.btn-blue{background:#0077ff}
 .btn:disabled{opacity:0.5}
 .result{background:#0a0a0a;border:1px solid #222;border-radius:3px;padding:16px;margin-top:12px;white-space:pre-wrap;font-size:13px;line-height:1.8;color:#ccc;display:none}
 .copy-btn{background:transparent;border:1px solid #333;color:#555;font-size:9px;letter-spacing:2px;padding:4px 10px;cursor:pointer;border-radius:2px;margin-top:8px;font-family:'Montserrat',sans-serif}
 .loader{display:none;text-align:center;padding:20px;color:#E8001D;font-family:'Bebas Neue',sans-serif;letter-spacing:3px;font-size:16px}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{background:rgba(232,0,29,0.1);border:1px solid rgba(232,0,29,0.2);color:#E8001D;font-size:11px;padding:3px 10px;border-radius:2px}
+.img-preview{width:100%;border-radius:4px;margin-top:12px;display:none}
+.status{padding:10px;border-radius:3px;font-size:12px;margin-top:8px;display:none}
+.status-ok{background:rgba(0,204,102,0.1);border:1px solid #00cc66;color:#00cc66}
+.status-err{background:rgba(232,0,29,0.1);border:1px solid #E8001D;color:#E8001D}
 </style>
 </head>
 <body>
@@ -40,10 +46,10 @@ textarea{min-height:70px;resize:vertical}
   </select>
   <label>ДОПОЛНИТЕЛЬНО</label>
   <textarea id="extra" placeholder="Скидка 20%, новый вкус..."></textarea>
-  <button class="btn" id="btn" onclick="generate()">⚡ СГЕНЕРИРОВАТЬ</button>
+  <button class="btn" id="btn" onclick="generate()">⚡ СГЕНЕРИРОВАТЬ ТЕКСТ</button>
 </div>
 
-<div class="loader" id="loader">ГЕНЕРИРУЮ КОНТЕНТ...</div>
+<div class="loader" id="loader">ГЕНЕРИРУЮ...</div>
 
 <div class="card" id="vkCard" style="display:none">
   <label>ВКОНТАКТЕ — ПОСТ</label>
@@ -51,6 +57,12 @@ textarea{min-height:70px;resize:vertical}
   <button class="copy-btn" onclick="copy('vkPost')">КОПИРОВАТЬ</button>
   <label style="margin-top:12px">ХЭШТЕГИ</label>
   <div class="tags" id="vkTags"></div>
+  <br>
+  <button class="btn" id="imgBtn" onclick="generateImage()">🎨 СГЕНЕРИРОВАТЬ КАРТИНКУ</button>
+  <img id="imgPreview" class="img-preview">
+  <div class="loader" id="imgLoader">ГЕНЕРИРУЮ КАРТИНКУ...</div>
+  <button class="btn btn-green" id="vkBtn" onclick="postToVK()" style="display:none">📤 ОПУБЛИКОВАТЬ В ВК</button>
+  <div class="status" id="vkStatus"></div>
 </div>
 
 <div class="card" id="igCard" style="display:none">
@@ -65,6 +77,9 @@ textarea{min-height:70px;resize:vertical}
 </div>
 
 <script>
+let generatedImageBase64 = null;
+let vkPostText = '';
+
 async function generate(){
   const topic=document.getElementById('topic').value.trim();
   if(!topic){alert('Введи тему!');return;}
@@ -76,15 +91,20 @@ async function generate(){
   document.getElementById('igCard').style.display='none';
   const types={promo:'рекламный',educational:'информационный',motivational:'мотивационный',product:'обзор продукта'};
   const system='Ты контент-менеджер PowerPro (спортпит, Россия). Отвечай ТОЛЬКО валидным JSON без markdown.';
-  const prompt=`Создай ${types[type]} контент для ВКонтакте и Instagram.\nПродукт: ${topic}\n${extra?'Детали: '+extra:''}\nJSON: {"vk":{"post":"текст поста","hashtags":["#тег1","#тег2","#тег3","#тег4","#тег5"]},"ig":{"caption":"caption текст","reels_script":"сценарий по секундам","hashtags":["#tag1","#tag2","#tag3","#tag4","#tag5"]}}`;
+  const prompt=`Создай ${types[type]} контент для ВКонтакте и Instagram.\nПродукт: ${topic}\n${extra?'Детали: '+extra:''}\nJSON: {"vk":{"post":"текст поста","hashtags":["#тег1","#тег2","#тег3","#тег4","#тег5"]},"ig":{"caption":"caption текст","reels_script":"сценарий по секундам","hashtags":["#tag1","#tag2","#tag3","#tag4","#tag5"]},"image_prompt":"prompt for image generation in English, sports nutrition style, professional photo"}`;
   try{
     const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2000,system,messages:[{role:'user',content:prompt}]})});
-  const data=await res.json();if(data.error){throw new Error(JSON.stringify(data.error));}const raw=(data.content||[]).map(i=>i.text||'').join('').trim().replace(/^```[a-z]*\n?/i,'').replace(/```$/,'').trim();const d=JSON.parse(raw);
+    const data=await res.json();
+    if(data.error){throw new Error(JSON.stringify(data.error));}
+    const raw=(data.content||[]).map(i=>i.text||'').join('').trim().replace(/^```[a-z]*\n?/i,'').replace(/```$/,'').trim();
+    const d=JSON.parse(raw);
     if(d.vk){
+      vkPostText=d.vk.post+'\n\n'+d.vk.hashtags.join(' ');
       document.getElementById('vkPost').textContent=d.vk.post;
       document.getElementById('vkPost').style.display='block';
       document.getElementById('vkTags').innerHTML=d.vk.hashtags.map(t=>`<span class="tag">${t}</span>`).join('');
       document.getElementById('vkCard').style.display='block';
+      if(d.image_prompt) window._imagePrompt=d.image_prompt;
     }
     if(d.ig){
       document.getElementById('igCaption').textContent=d.ig.caption;
@@ -98,6 +118,47 @@ async function generate(){
   document.getElementById('btn').disabled=false;
   document.getElementById('loader').style.display='none';
 }
+
+async function generateImage(){
+  document.getElementById('imgBtn').disabled=true;
+  document.getElementById('imgLoader').style.display='block';
+  const prompt=window._imagePrompt||'Professional sports nutrition protein shake, gym aesthetic, red and black colors, high quality photo';
+  try{
+    const res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const data=await res.json();
+    if(data.artifacts&&data.artifacts[0]){
+      generatedImageBase64=data.artifacts[0].base64;
+      document.getElementById('imgPreview').src='data:image/png;base64,'+generatedImageBase64;
+      document.getElementById('imgPreview').style.display='block';
+      document.getElementById('vkBtn').style.display='block';
+    }else{throw new Error('Нет картинки в ответе');}
+  }catch(e){alert('Ошибка картинки: '+e.message);}
+  document.getElementById('imgBtn').disabled=false;
+  document.getElementById('imgLoader').style.display='none';
+}
+
+async function postToVK(){
+  document.getElementById('vkBtn').disabled=true;
+  const status=document.getElementById('vkStatus');
+  status.style.display='block';
+  status.className='status';
+  status.textContent='Публикую в ВКонтакте...';
+  try{
+    const res=await fetch('/api/vk-post',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:vkPostText,imageBase64:generatedImageBase64})});
+    const data=await res.json();
+    if(data.response&&data.response.post_id){
+      status.className='status status-ok';
+      status.textContent='✅ Пост опубликован в ВКонтакте! ID: '+data.response.post_id;
+    }else{
+      throw new Error(JSON.stringify(data));
+    }
+  }catch(e){
+    status.className='status status-err';
+    status.textContent='❌ Ошибка: '+e.message;
+  }
+  document.getElementById('vkBtn').disabled=false;
+}
+
 function copy(id){
   navigator.clipboard.writeText(document.getElementById(id).textContent);
   alert('Скопировано!');
