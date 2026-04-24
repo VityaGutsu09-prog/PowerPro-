@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PowerPro Agent</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d0d0d;color:#f0f0f0;font-family:'Montserrat',sans-serif;padding:20px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#E8001D;letter-spacing:4px}
+.logo span{color:#fff}
+.sub{font-size:9px;letter-spacing:5px;color:#555;margin-bottom:24px}
+.card{background:#141414;border:1px solid #222;border-radius:4px;padding:20px;margin-bottom:16px}
+label{display:block;font-size:9px;letter-spacing:3px;color:#E8001D;margin-bottom:8px}
+input,select,textarea{width:100%;background:#0a0a0a;border:1px solid #222;color:#f0f0f0;font-family:'Montserrat',sans-serif;font-size:13px;padding:10px;border-radius:3px;margin-bottom:12px}
+textarea{min-height:70px;resize:vertical}
+.btn{width:100%;padding:16px;background:#E8001D;color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:5px;cursor:pointer;border-radius:3px}
+.btn:disabled{opacity:0.5}
+.result{background:#0a0a0a;border:1px solid #222;border-radius:3px;padding:16px;margin-top:12px;white-space:pre-wrap;font-size:13px;line-height:1.8;color:#ccc;display:none}
+.copy-btn{background:transparent;border:1px solid #333;color:#555;font-size:9px;letter-spacing:2px;padding:4px 10px;cursor:pointer;border-radius:2px;margin-top:8px;font-family:'Montserrat',sans-serif}
+.loader{display:none;text-align:center;padding:20px;color:#E8001D;font-family:'Bebas Neue',sans-serif;letter-spacing:3px;font-size:16px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{background:rgba(232,0,29,0.1);border:1px solid rgba(232,0,29,0.2);color:#E8001D;font-size:11px;padding:3px 10px;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="logo">POWER<span>PRO</span></div>
+<div class="sub">AI КОНТЕНТ АГЕНТ · РОССИЯ</div>
+
+<div class="card">
+  <label>ТЕМА / ПРОДУКТ</label>
+  <input type="text" id="topic" placeholder="Протеин, BCAA, акция..." value="Протеиновый коктейль">
+  <label>ТИП КОНТЕНТА</label>
+  <select id="type">
+    <option value="promo">Реклама / Акция</option>
+    <option value="educational">Польза / Инфо</option>
+    <option value="motivational">Мотивация</option>
+    <option value="product">Обзор продукта</option>
+  </select>
+  <label>ДОПОЛНИТЕЛЬНО</label>
+  <textarea id="extra" placeholder="Скидка 20%, новый вкус..."></textarea>
+  <button class="btn" id="btn" onclick="generate()">⚡ СГЕНЕРИРОВАТЬ</button>
+</div>
+
+<div class="loader" id="loader">ГЕНЕРИРУЮ КОНТЕНТ...</div>
+
+<div class="card" id="vkCard" style="display:none">
+  <label>ВКОНТАКТЕ — ПОСТ</label>
+  <div class="result" id="vkPost"></div>
+  <button class="copy-btn" onclick="copy('vkPost')">КОПИРОВАТЬ</button>
+  <label style="margin-top:12px">ХЭШТЕГИ</label>
+  <div class="tags" id="vkTags"></div>
+</div>
+
+<div class="card" id="igCard" style="display:none">
+  <label>INSTAGRAM — CAPTION</label>
+  <div class="result" id="igCaption"></div>
+  <button class="copy-btn" onclick="copy('igCaption')">КОПИРОВАТЬ</button>
+  <label style="margin-top:12px">СЦЕНАРИЙ REELS</label>
+  <div class="result" id="igScript"></div>
+  <button class="copy-btn" onclick="copy('igScript')">КОПИРОВАТЬ</button>
+  <label style="margin-top:12px">ХЭШТЕГИ</label>
+  <div class="tags" id="igTags"></div>
+</div>
+
+<script>
+async function generate(){
+  const topic=document.getElementById('topic').value.trim();
+  if(!topic){alert('Введи тему!');return;}
+  const type=document.getElementById('type').value;
+  const extra=document.getElementById('extra').value;
+  document.getElementById('btn').disabled=true;
+  document.getElementById('loader').style.display='block';
+  document.getElementById('vkCard').style.display='none';
+  document.getElementById('igCard').style.display='none';
+  const types={promo:'рекламный',educational:'информационный',motivational:'мотивационный',product:'обзор продукта'};
+  const system='Ты контент-менеджер PowerPro (спортпит, Россия). Отвечай ТОЛЬКО валидным JSON без markdown.';
+  const prompt=`Создай ${types[type]} контент для ВКонтакте и Instagram.\nПродукт: ${topic}\n${extra?'Детали: '+extra:''}\nJSON: {"vk":{"post":"текст поста","hashtags":["#тег1","#тег2","#тег3","#тег4","#тег5"]},"ig":{"caption":"caption текст","reels_script":"сценарий по секундам","hashtags":["#tag1","#tag2","#tag3","#tag4","#tag5"]}}`;
+  try{
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const raw=data.content.map(i=>i.text||'').join('').trim().replace(/^```[a-z]*\n?/i,'').replace(/```$/,'').trim();
+    const d=JSON.parse(raw);
+    if(d.vk){
+      document.getElementById('vkPost').textContent=d.vk.post;
+      document.getElementById('vkPost').style.display='block';
+      document.getElementById('vkTags').innerHTML=d.vk.hashtags.map(t=>`<span class="tag">${t}</span>`).join('');
+      document.getElementById('vkCard').style.display='block';
+    }
+    if(d.ig){
+      document.getElementById('igCaption').textContent=d.ig.caption;
+      document.getElementById('igCaption').style.display='block';
+      document.getElementById('igScript').textContent=d.ig.reels_script;
+      document.getElementById('igScript').style.display='block';
+      document.getElementById('igTags').innerHTML=d.ig.hashtags.map(t=>`<span class="tag">${t}</span>`).join('');
+      document.getElementById('igCard').style.display='block';
+    }
+  }catch(e){alert('Ошибка: '+e.message);}
+  document.getElementById('btn').disabled=false;
+  document.getElementById('loader').style.display='none';
+}
+function copy(id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent);
+  alert('Скопировано!');
+}
+</script>
+</body>
+</html>
