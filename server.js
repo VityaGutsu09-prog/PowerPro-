@@ -41,20 +41,20 @@ const PRODUCTS = [
 ];
 
 const FLAVOR_BACKGROUNDS = {
-  chocolate:        'dark melting chocolate waves and liquid chocolate splashes, cocoa powder dust cloud, cacao beans scattered, dark rich brown tones, cinematic moody',
-  vanilla:          'soft cream ivory vanilla smoke swirls, vanilla bean pods floating, warm golden milk haze, silky liquid waves, elegant warm dark background',
-  strawberry:       'fresh red strawberries exploding with juice splashes, pink berry particles, glossy red drops flying, vibrant dark moody background',
-  lemon:            'bright yellow lemon slices exploding with citrus juice spray, zest particles flying, sharp yellow light rays on deep black background',
-  coconut:          'white coconut shavings floating like snow, coconut shell halves, milky white liquid splash, tropical palm leaf shadow, dark exotic background',
-  coffee:           'dark espresso liquid splash swirling, roasted coffee beans scattered, steam wisps rising, dark mocha rich brown tones, barista aesthetic',
-  caramel:          'golden caramel sauce dripping and swirling, toffee shards flying, warm amber liquid wave, glossy golden droplets on black background',
-  peanut:           'roasted peanuts scattered mid-air, smooth peanut butter swirl ribbon, warm earthy brown textures, natural matte dark background',
-  hazelnut:         'hazelnuts and praline pieces flying, dark chocolate hazelnut cream swirl, warm brown elegant tones, rich nutty dark atmosphere',
-  pistachio:        'crushed pistachio nuts scattered, soft sage green particles floating, cream swirl with green pistachio pieces, muted elegant dark background',
-  banana:           'ripe yellow banana slices and cream wave, tropical yellow particles floating, smooth milkshake swirl, warm yellow glow on dark background',
-  pear:             'fresh green pear slices with juice droplets, pear halves with liquid splash, subtle green haze, elegant fruit particles on dark background',
-  chocolate_coconut:'melting dark chocolate waves mixed with white coconut flakes swirling, two-tone dramatic splash, tropical dark moody atmosphere',
-  energy:           'electric blue and crimson red energy sparks, lightning bolt trails, power surge neon glow, dynamic light streaks on pure black background',
+  chocolate:        'hyperrealistic macro photography, molten dark chocolate explosive splash mid-air, liquid chocolate tsunami wave, cocoa powder exploding like smoke bomb, cacao beans flying in slow motion, ultra dark rich background, cinematic 8K',
+  vanilla:          'hyperrealistic macro, creamy vanilla liquid explosion bursting upward, vanilla bean pods shattering releasing seeds, golden milk wave frozen mid-splash, ivory cream swirling like galaxy, warm amber god rays, dark elegant background, 8K',
+  strawberry:       'hyperrealistic macro photography, fresh red strawberries exploding from inside with juice burst, hundreds of glossy red droplets frozen mid-air, pink juice spray catching light, vibrant red particles against pure black, explosive commercial photography, 8K',
+  lemon:            'hyperrealistic macro, lemon cut in half exploding with citrus juice spray burst, hundreds of yellow droplets frozen mid-air, zest particles flying like sparks, sharp acidic yellow backlit glow, deep black background, ultra detailed, 8K',
+  coconut:          'hyperrealistic macro, coconut shell cracking open with milk explosion burst, white coconut shavings flying like snow storm, milky white liquid splash frozen mid-air, tropical dramatic dark background, exotic cinematic lighting, 8K',
+  coffee:           'hyperrealistic macro, dark espresso shot hitting surface with massive explosion splash, roasted coffee beans raining down in slow motion, steam rising dramatically, rich dark mocha liquid burst, barista cinematic dark atmosphere, 8K',
+  caramel:          'hyperrealistic macro, liquid gold caramel exploding upward in slow motion, thick glossy caramel strings stretching mid-air, toffee shards shattering, warm amber backlight through caramel wave, deep black background, ultra detailed, 8K',
+  peanut:           'hyperrealistic macro, roasted peanuts exploding outward mid-air, smooth peanut butter thick wave frozen in splash, warm golden brown particles flying like slow motion explosion, earthy dramatic dark background, 8K',
+  hazelnut:         'hyperrealistic macro, hazelnuts cracking and exploding mid-air, dark chocolate hazelnut cream wave burst, praline shards flying, rich warm brown tones, dramatic backlight through cream splash, ultra dark atmosphere, 8K',
+  pistachio:        'hyperrealistic macro, pistachio shells bursting open mid-air, crushed pistachio dust cloud exploding, sage green cream wave splash, green particles catching dramatic side light, deep black background, elegant cinematic, 8K',
+  banana:           'hyperrealistic macro, ripe banana slices exploding with cream burst, tropical yellow liquid wave frozen mid-splash, banana particles flying mid-air, warm golden backlight, smooth milkshake wave, dark tropical atmosphere, 8K',
+  pear:             'hyperrealistic macro, fresh pear sliced in half exploding with juice spray, green pear droplets frozen mid-air, subtle green mist backlit, elegant liquid splash wave, dramatic dark background, ultra detailed commercial, 8K',
+  chocolate_coconut:'hyperrealistic macro, dark chocolate and white coconut milk colliding in massive dual explosion, two-tone liquid clash frozen mid-air, chocolate waves and coconut snow mixing, ultra dramatic dark moody atmosphere, 8K',
+  energy:           'hyperrealistic, electric plasma explosion with crimson red and electric blue lightning arcs, power surge energy burst, neon light trails frozen in motion, sparks flying like meteor shower, ultra dark black background, intense dramatic, 8K',
 };
 
 function getProductMatch(prompt) {
@@ -153,11 +153,11 @@ app.post('/api/image', async (req, res) => {
             { text: positive, weight: 1 },
             { text: negative, weight: -1 }
           ],
-          cfg_scale: 8,
+          cfg_scale: 11,
           height: 1024,
           width: 1024,
           samples: 1,
-          steps: 35
+          steps: 45
         })
       });
       const bgData = await bgRes.json();
@@ -181,11 +181,11 @@ app.post('/api/image', async (req, res) => {
           { text: positive, weight: 1 },
           { text: negative, weight: -1 }
         ],
-        cfg_scale: 9,
+        cfg_scale: 11,
         height: 1024,
         width: 1024,
         samples: 1,
-        steps: 40
+        steps: 45
       })
     });
     const data = await response.json();
