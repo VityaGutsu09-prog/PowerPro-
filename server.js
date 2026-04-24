@@ -3,8 +3,6 @@ const cors = require('cors');
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 
-const sharp = require('sharp');
-const path = require('path');
 const app = express();
 app.use(cors());
 app.use(express.json({limit: '10mb'}));
@@ -38,10 +36,7 @@ app.post('/api/image', async (req, res) => {
         'Authorization': `Bearer ${process.env.STABILITY_API_KEY}`
       },
       body: JSON.stringify({
-        text_prompts: [
-  { text: `Professional sports nutrition product photo, dark background, dramatic lighting, yellow and red accents, PowerPro brand style, ${prompt}, high quality, photorealistic, 8k`, weight: 1 },
-  { text: "blurry, text, watermark, cartoon, anime, low quality", weight: -1 }
-],
+        text_prompts: [{ text: prompt, weight: 1 }],
         cfg_scale: 7,
         height: 1024,
         width: 1024,
@@ -50,10 +45,11 @@ app.post('/api/image', async (req, res) => {
       })
     });
     const data = await response.json();
-res.json(data);
-} catch(e) {
-  res.status(500).json({ error: e.message });
-}
+    res.json(data);
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 app.post('/api/vk-post', async (req, res) => {
   try {
