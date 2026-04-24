@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -117,113 +118,178 @@ async function generate(){
   document.getElementById('loader').style.display='none';
 }
 
+// ─── Цвета атмосферы по типу контента ───────────────────────────────────────
+const moodColors = {
+  promo:       { glow: 'rgba(232,0,29,0.35)',   accent: 'rgba(255,180,0,0.12)',  label: 'АКЦИЯ' },
+  educational: { glow: 'rgba(0,120,255,0.30)',  accent: 'rgba(0,200,255,0.10)',  label: 'ПОЛЬЗА' },
+  motivational:{ glow: 'rgba(0,200,80,0.28)',   accent: 'rgba(0,255,120,0.08)',  label: 'МОТИВАЦИЯ' },
+  product:     { glow: 'rgba(180,120,255,0.28)',accent: 'rgba(140,80,255,0.10)', label: 'ОБЗОР' }
+};
+
 function addLogoToImage(srcUrl, isBase64, base64data){
-  const canvas=document.createElement('canvas');
-  const ctx=canvas.getContext('2d');
-  const img=new Image();
-  img.crossOrigin='anonymous';
-  img.onload=function(){
-    const W=1080;
-    const H=1080;
-    canvas.width=W;
-    canvas.height=H;
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
 
-    // Тёмный фон с градиентом
-    const bgGrad=ctx.createRadialGradient(W*0.3,H*0.3,0,W*0.5,H*0.5,W*0.8);
-    bgGrad.addColorStop(0,'#1a0a0a');
-    bgGrad.addColorStop(0.5,'#0d0d0d');
-    bgGrad.addColorStop(1,'#000000');
-    ctx.fillStyle=bgGrad;
-    ctx.fillRect(0,0,W,H);
+  img.onload = function(){
+    const W = 1080, H = 1080;
+    canvas.width = W;
+    canvas.height = H;
 
-    // Красный акцент снизу
-    const redGrad=ctx.createLinearGradient(0,H*0.7,0,H);
-    redGrad.addColorStop(0,'rgba(232,0,29,0)');
-    redGrad.addColorStop(1,'rgba(232,0,29,0.25)');
-    ctx.fillStyle=redGrad;
-    ctx.fillRect(0,0,W,H);
+    const type = document.getElementById('type').value;
+    const mood = moodColors[type] || moodColors.promo;
 
-    // Жёлтый акцент сверху слева
-    const yellowGrad=ctx.createRadialGradient(0,0,0,0,0,W*0.5);
-    yellowGrad.addColorStop(0,'rgba(255,200,0,0.08)');
-    yellowGrad.addColorStop(1,'rgba(255,200,0,0)');
-    ctx.fillStyle=yellowGrad;
-    ctx.fillRect(0,0,W,H);
+    // ── Фон: глубокий чёрный с радиальным градиентом ──
+    const bg = ctx.createRadialGradient(W*0.4, H*0.35, 0, W*0.5, H*0.5, W*0.85);
+    bg.addColorStop(0, '#1a0a0a');
+    bg.addColorStop(0.55, '#0d0d0d');
+    bg.addColorStop(1, '#000000');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
 
-    // Диагональные линии в стиле бренда
-    ctx.strokeStyle='rgba(232,0,29,0.06)';
-    ctx.lineWidth=1;
-    for(let i=-H;i<W+H;i+=40){
+    // ── Акцентный цвет сверху-слева (по типу контента) ──
+    const topGlow = ctx.createRadialGradient(0, 0, 0, W*0.15, H*0.15, W*0.6);
+    topGlow.addColorStop(0, mood.accent);
+    topGlow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = topGlow;
+    ctx.fillRect(0, 0, W, H);
+
+    // ── Красный градиент снизу (всегда — фирменный) ──
+    const redBottom = ctx.createLinearGradient(0, H*0.65, 0, H);
+    redBottom.addColorStop(0, 'rgba(232,0,29,0)');
+    redBottom.addColorStop(1, 'rgba(232,0,29,0.22)');
+    ctx.fillStyle = redBottom;
+    ctx.fillRect(0, 0, W, H);
+
+    // ── Диагональные линии бренда ──
+    ctx.strokeStyle = 'rgba(232,0,29,0.05)';
+    ctx.lineWidth = 1;
+    for(let i = -H; i < W + H; i += 44){
       ctx.beginPath();
-      ctx.moveTo(i,0);
-      ctx.lineTo(i+H,H);
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i + H, H);
       ctx.stroke();
     }
 
-    // Рисуем продукт по центру
-    const scale=Math.min(W*0.8/img.width, H*0.75/img.height);
-    const pw=img.width*scale;
-    const ph=img.height*scale;
-    const px=(W-pw)/2;
-    const py=(H-ph)/2 - 30;
+    // ── Позиция и размер продукта ──
+    const scale = Math.min(W * 0.78 / img.width, H * 0.72 / img.height);
+    const pw = img.width * scale;
+    const ph = img.height * scale;
+    const px = (W - pw) / 2;
+    const py = (H - ph) / 2 - 40;
 
-    // Тень под продуктом
-    ctx.shadowColor='rgba(0,0,0,0.8)';
-    ctx.shadowBlur=60;
-    ctx.shadowOffsetY=30;
-    ctx.drawImage(img,px,py,pw,ph);
-    ctx.shadowColor='transparent';
-    ctx.shadowBlur=0;
-    ctx.shadowOffsetY=0;
+    // ── Светящийся ореол под продуктом (по типу контента) ──
+    const glowGrad = ctx.createRadialGradient(W/2, py+ph*0.75, 0, W/2, py+ph*0.75, pw*0.6);
+    glowGrad.addColorStop(0, mood.glow);
+    glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glowGrad;
+    ctx.fillRect(0, 0, W, H);
 
-    // Логотип
-    const logo=new Image();
-    logo.crossOrigin='anonymous';
-    logo.onload=function(){
-      const lw=W*0.3;
-      const lh=logo.height*(lw/logo.width);
-      ctx.drawImage(logo,W-lw-24,H-lh-24,lw,lh);
-      const final=canvas.toDataURL('image/jpeg',0.95);
-      generatedImageBase64=final.split(',')[1];
-      document.getElementById('imgPreview').src=final;
-      document.getElementById('imgPreview').style.display='block';
-      document.getElementById('vkBtn').style.display='block';
-      document.getElementById('imgBtn').disabled=false;
-      document.getElementById('imgLoader').style.display='none';
+    // ── Тень продукта ──
+    ctx.shadowColor = 'rgba(0,0,0,0.9)';
+    ctx.shadowBlur = 80;
+    ctx.shadowOffsetY = 40;
+    ctx.drawImage(img, px, py, pw, ph);
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+
+    // ── Полоса внизу с градиентом ──
+    const strip = ctx.createLinearGradient(0, H*0.88, 0, H);
+    strip.addColorStop(0, 'rgba(232,0,29,0)');
+    strip.addColorStop(1, 'rgba(232,0,29,0.55)');
+    ctx.fillStyle = strip;
+    ctx.fillRect(0, H*0.88, W, H*0.12);
+
+    // ── Текст POWERPRO на полосе ──
+    ctx.font = 'bold 52px "Bebas Neue", Impact, sans-serif';
+    ctx.letterSpacing = '6px';
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('POWER', 36, H * 0.945);
+    ctx.fillStyle = '#E8001D';
+    const powerW = ctx.measureText('POWER').width;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    // Рисуем PRO другим цветом через две части
+    ctx.fillStyle = '#E8001D';
+    ctx.font = 'bold 52px "Bebas Neue", Impact, sans-serif';
+
+    // ── Метка типа контента (правый верхний угол) ──
+    ctx.font = '600 18px Montserrat, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.textBaseline = 'top';
+    const label = mood.label;
+    const lw = ctx.measureText(label).width;
+    ctx.fillStyle = 'rgba(232,0,29,0.18)';
+    ctx.fillRect(W - lw - 32, 24, lw + 24, 34);
+    ctx.fillStyle = '#E8001D';
+    ctx.fillText(label, W - lw - 20, 31);
+
+    // ── Логотип ──
+    const logo = new Image();
+    logo.crossOrigin = 'anonymous';
+
+    const finalize = () => {
+      const final = canvas.toDataURL('image/jpeg', 0.95);
+      generatedImageBase64 = final.split(',')[1];
+      document.getElementById('imgPreview').src = final;
+      document.getElementById('imgPreview').style.display = 'block';
+      document.getElementById('vkBtn').style.display = 'block';
+      document.getElementById('imgBtn').disabled = false;
+      document.getElementById('imgLoader').style.display = 'none';
     };
-    logo.onerror=function(){
-      const final=canvas.toDataURL('image/jpeg',0.95);
-      generatedImageBase64=final.split(',')[1];
-      document.getElementById('imgPreview').src=final;
-      document.getElementById('imgPreview').style.display='block';
-      document.getElementById('vkBtn').style.display='block';
-      document.getElementById('imgBtn').disabled=false;
-      document.getElementById('imgLoader').style.display='none';
+
+    logo.onload = function(){
+      const lw = W * 0.28;
+      const lh = logo.height * (lw / logo.width);
+      // Логотип в правом нижнем углу, поверх полосы
+      ctx.globalAlpha = 0.9;
+      ctx.drawImage(logo, W - lw - 28, H - lh - 20, lw, lh);
+      ctx.globalAlpha = 1;
+      finalize();
     };
-    logo.src='https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png';
+    logo.onerror = finalize;
+    logo.src = 'https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png';
   };
-  img.src=isBase64?'data:image/png;base64,'+base64data:srcUrl;
+
+  img.src = isBase64 ? 'data:image/png;base64,' + base64data : srcUrl;
 }
 
 async function generateImage(){
-  document.getElementById('imgBtn').disabled=true;
-  document.getElementById('imgLoader').style.display='block';
-  const topic=document.getElementById('topic').value.trim();
+  document.getElementById('imgBtn').disabled = true;
+  document.getElementById('imgLoader').style.display = 'block';
+  document.getElementById('imgPreview').style.display = 'none';
+  document.getElementById('vkBtn').style.display = 'none';
+
+  const topic = document.getElementById('topic').value.trim();
+  const type  = document.getElementById('type').value;
+
+  // ← Передаём оба параметра для умного промпта на сервере
+  const promptText = `${topic} [type:${type}]`;
+
   try{
-    const res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:topic})});
-    const data=await res.json();
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ prompt: promptText })
+    });
+    const data = await res.json();
+
     if(data.productImage){
-      addLogoToImage(data.productImage,false,null);
+      addLogoToImage(data.productImage, false, null);
       return;
-    }else if(data.artifacts&&data.artifacts[0]){
-      addLogoToImage(null,true,data.artifacts[0].base64);
+    } else if(data.artifacts && data.artifacts[0]){
+      addLogoToImage(null, true, data.artifacts[0].base64);
       return;
-    }else{
-      throw new Error('Нет картинки в ответе');
+    } else {
+      throw new Error('Нет картинки в ответе: ' + JSON.stringify(data));
     }
-  }catch(e){alert('Ошибка картинки: '+e.message);}
-  document.getElementById('imgBtn').disabled=false;
-  document.getElementById('imgLoader').style.display='none';
+  } catch(e){
+    alert('Ошибка картинки: ' + e.message);
+    document.getElementById('imgBtn').disabled = false;
+    document.getElementById('imgLoader').style.display = 'none';
+  }
 }
 
 async function postToVK(){
@@ -253,5 +319,6 @@ function copy(id){
   alert('Скопировано!');
 }
 </script>
+
 </body>
 </html>
