@@ -36,7 +36,7 @@ app.post('/api/image', async (req, res) => {
         'Authorization': `Bearer ${process.env.STABILITY_API_KEY}`
       },
       body: JSON.stringify({
-        text_prompts: [{ text: prompt, weight: 1 }],
+        text_prompts: [{ text: `Professional lifestyle photography of PowerPro protein bar or protein shake, dark moody atmosphere, cinematic lighting, rich chocolate or vanilla textures, gym lifestyle aesthetic, ingredients scattered artistically around product, steam or milk splash effect, dark black background with dramatic red and yellow accent lighting, no text on products, no labels, ultra realistic, 8k, commercial food photography style, ${prompt}`, weight: 1 }, { text: "blurry, text, watermark, cartoon, anime, low quality, blue colors", weight: -1 }],
         cfg_scale: 7,
         height: 1024,
         width: 1024,
