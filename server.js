@@ -3,6 +3,8 @@ const cors = require('cors');
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 
+const sharp = require('sharp');
+const path = require('path');
 const app = express();
 app.use(cors());
 app.use(express.json({limit: '10mb'}));
@@ -48,9 +50,14 @@ app.post('/api/image', async (req, res) => {
       })
     });
     const data = await response.json();
-    res.json(data);
-  } catch(e) {
-    res.status(500).json({ error: e.message });
+const imageBase64 = data.artifacts[0].base64;
+const imageBuffer = Buffer.from(imageBase64, 'base64');
+const logoBuffer = await fetch('https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png').then(r => r.buffer());
+const finalImage = await sharp(imageBuffer)
+  .composite([{ input: logoBuffer, gravity: 'south' }])
+  .toBuffer();
+res.json({ artifacts: [{ base64: finalImage.toString('base64') }] });
+ } catch(e) {res.status(500).json({ error: e.message });
   }
 });
 
