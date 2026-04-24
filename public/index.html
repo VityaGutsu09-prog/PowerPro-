@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -118,195 +117,183 @@ async function generate(){
   document.getElementById('loader').style.display='none';
 }
 
-// ─── Цвета атмосферы по типу контента ───────────────────────────────────────
-const moodColors = {
-  promo:       { glow: 'rgba(232,0,29,0.35)',   accent: 'rgba(255,180,0,0.12)',  label: 'АКЦИЯ' },
-  educational: { glow: 'rgba(0,120,255,0.30)',  accent: 'rgba(0,200,255,0.10)',  label: 'ПОЛЬЗА' },
-  motivational:{ glow: 'rgba(0,200,80,0.28)',   accent: 'rgba(0,255,120,0.08)',  label: 'МОТИВАЦИЯ' },
-  product:     { glow: 'rgba(180,120,255,0.28)',accent: 'rgba(140,80,255,0.10)', label: 'ОБЗОР' }
+const moodOverlay = {
+  promo:        'rgba(232,0,29,0.18)',
+  educational:  'rgba(0,120,255,0.15)',
+  motivational: 'rgba(0,200,80,0.15)',
+  product:      'rgba(180,120,255,0.15)',
 };
 
-function addLogoToImage(srcUrl, isBase64, base64data){
+function composeImage(productSrc, bgBase64) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
+  const W = 1080, H = 1080;
+  canvas.width = W;
+  canvas.height = H;
+  const type = document.getElementById('type').value;
 
-  img.onload = function(){
-    const W = 1080, H = 1080;
-    canvas.width = W;
-    canvas.height = H;
-
-    const type = document.getElementById('type').value;
-    const mood = moodColors[type] || moodColors.promo;
-
-    // ── Фон: глубокий чёрный с радиальным градиентом ──
-    const bg = ctx.createRadialGradient(W*0.4, H*0.35, 0, W*0.5, H*0.5, W*0.85);
-    bg.addColorStop(0, '#1a0a0a');
-    bg.addColorStop(0.55, '#0d0d0d');
-    bg.addColorStop(1, '#000000');
-    ctx.fillStyle = bg;
+  const drawFinal = (bgImg, productImg) => {
+    if (bgImg) {
+      ctx.drawImage(bgImg, 0, 0, W, H);
+    } else {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, W, H);
+    }
+    const dimmer = ctx.createRadialGradient(W/2, H/2, W*0.1, W/2, H/2, W*0.75);
+    dimmer.addColorStop(0, 'rgba(0,0,0,0.55)');
+    dimmer.addColorStop(1, 'rgba(0,0,0,0.15)');
+    ctx.fillStyle = dimmer;
     ctx.fillRect(0, 0, W, H);
-
-    // ── Акцентный цвет сверху-слева (по типу контента) ──
-    const topGlow = ctx.createRadialGradient(0, 0, 0, W*0.15, H*0.15, W*0.6);
-    topGlow.addColorStop(0, mood.accent);
-    topGlow.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = topGlow;
+    ctx.fillStyle = moodOverlay[type] || moodOverlay.promo;
     ctx.fillRect(0, 0, W, H);
-
-    // ── Красный градиент снизу (всегда — фирменный) ──
-    const redBottom = ctx.createLinearGradient(0, H*0.65, 0, H);
+    const redBottom = ctx.createLinearGradient(0, H*0.6, 0, H);
     redBottom.addColorStop(0, 'rgba(232,0,29,0)');
-    redBottom.addColorStop(1, 'rgba(232,0,29,0.22)');
+    redBottom.addColorStop(1, 'rgba(232,0,29,0.30)');
     ctx.fillStyle = redBottom;
     ctx.fillRect(0, 0, W, H);
-
-    // ── Диагональные линии бренда ──
-    ctx.strokeStyle = 'rgba(232,0,29,0.05)';
+    ctx.strokeStyle = 'rgba(232,0,29,0.06)';
     ctx.lineWidth = 1;
-    for(let i = -H; i < W + H; i += 44){
-      ctx.beginPath();
-      ctx.moveTo(i, 0);
-      ctx.lineTo(i + H, H);
-      ctx.stroke();
+    for (let i = -H; i < W+H; i += 44) {
+      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i+H, H); ctx.stroke();
     }
-
-    // ── Позиция и размер продукта ──
-    const scale = Math.min(W * 0.78 / img.width, H * 0.72 / img.height);
-    const pw = img.width * scale;
-    const ph = img.height * scale;
-    const px = (W - pw) / 2;
-    const py = (H - ph) / 2 - 40;
-
-    // ── Светящийся ореол под продуктом (по типу контента) ──
-    const glowGrad = ctx.createRadialGradient(W/2, py+ph*0.75, 0, W/2, py+ph*0.75, pw*0.6);
-    glowGrad.addColorStop(0, mood.glow);
-    glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = glowGrad;
-    ctx.fillRect(0, 0, W, H);
-
-    // ── Тень продукта ──
-    ctx.shadowColor = 'rgba(0,0,0,0.9)';
-    ctx.shadowBlur = 80;
-    ctx.shadowOffsetY = 40;
-    ctx.drawImage(img, px, py, pw, ph);
-    ctx.shadowColor = 'transparent';
-    ctx.shadowBlur = 0;
-    ctx.shadowOffsetY = 0;
-
-    // ── Полоса внизу с градиентом ──
-    const strip = ctx.createLinearGradient(0, H*0.88, 0, H);
-    strip.addColorStop(0, 'rgba(232,0,29,0)');
-    strip.addColorStop(1, 'rgba(232,0,29,0.55)');
-    ctx.fillStyle = strip;
-    ctx.fillRect(0, H*0.88, W, H*0.12);
-
-    // ── Текст POWERPRO на полосе ──
-    ctx.font = 'bold 52px "Bebas Neue", Impact, sans-serif';
-    ctx.letterSpacing = '6px';
-    ctx.fillStyle = 'rgba(255,255,255,0.92)';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('POWER', 36, H * 0.945);
-    ctx.fillStyle = '#E8001D';
-    const powerW = ctx.measureText('POWER').width;
-    ctx.fillStyle = 'rgba(255,255,255,0.92)';
-    // Рисуем PRO другим цветом через две части
-    ctx.fillStyle = '#E8001D';
-    ctx.font = 'bold 52px "Bebas Neue", Impact, sans-serif';
-
-    // ── Метка типа контента (правый верхний угол) ──
-    ctx.font = '600 18px Montserrat, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.textBaseline = 'top';
-    const label = mood.label;
-    const lw = ctx.measureText(label).width;
-    ctx.fillStyle = 'rgba(232,0,29,0.18)';
-    ctx.fillRect(W - lw - 32, 24, lw + 24, 34);
-    ctx.fillStyle = '#E8001D';
-    ctx.fillText(label, W - lw - 20, 31);
-
-    // ── Логотип ──
+    const scale = Math.min(W*0.72/productImg.width, H*0.68/productImg.height);
+    const pw = productImg.width*scale, ph = productImg.height*scale;
+    const px = (W-pw)/2, py = (H-ph)/2 - 30;
+    const glow = ctx.createRadialGradient(W/2, py+ph*0.8, 0, W/2, py+ph*0.8, pw*0.55);
+    glow.addColorStop(0, 'rgba(232,0,29,0.25)');
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+    ctx.shadowColor='rgba(0,0,0,0.95)'; ctx.shadowBlur=70; ctx.shadowOffsetY=35;
+    ctx.drawImage(productImg, px, py, pw, ph);
+    ctx.shadowColor='transparent'; ctx.shadowBlur=0; ctx.shadowOffsetY=0;
+    const strip = ctx.createLinearGradient(0, H*0.87, 0, H);
+    strip.addColorStop(0, 'rgba(180,0,20,0)');
+    strip.addColorStop(1, 'rgba(180,0,20,0.85)');
+    ctx.fillStyle = strip; ctx.fillRect(0, H*0.87, W, H*0.13);
+    ctx.font='700 54px "Bebas Neue", Impact, sans-serif';
+    ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(255,255,255,0.95)';
+    ctx.fillText('POWER', 36, H*0.945);
+    const pw2 = ctx.measureText('POWER').width;
+    ctx.fillStyle='#ffcc00';
+    ctx.fillText('PRO', 36+pw2+6, H*0.945);
     const logo = new Image();
-    logo.crossOrigin = 'anonymous';
-
+    logo.crossOrigin='anonymous';
     const finalize = () => {
       const final = canvas.toDataURL('image/jpeg', 0.95);
       generatedImageBase64 = final.split(',')[1];
       document.getElementById('imgPreview').src = final;
-      document.getElementById('imgPreview').style.display = 'block';
-      document.getElementById('vkBtn').style.display = 'block';
-      document.getElementById('imgBtn').disabled = false;
-      document.getElementById('imgLoader').style.display = 'none';
+      document.getElementById('imgPreview').style.display='block';
+      document.getElementById('vkBtn').style.display='block';
+      document.getElementById('imgBtn').disabled=false;
+      document.getElementById('imgLoader').style.display='none';
     };
-
-    logo.onload = function(){
-      const lw = W * 0.28;
-      const lh = logo.height * (lw / logo.width);
-      // Логотип в правом нижнем углу, поверх полосы
-      ctx.globalAlpha = 0.9;
-      ctx.drawImage(logo, W - lw - 28, H - lh - 20, lw, lh);
-      ctx.globalAlpha = 1;
+    logo.onload = function() {
+      const lw=W*0.26, lh=logo.height*(lw/logo.width);
+      ctx.globalAlpha=0.88;
+      ctx.drawImage(logo, W-lw-28, H-lh-18, lw, lh);
+      ctx.globalAlpha=1;
       finalize();
     };
     logo.onerror = finalize;
-    logo.src = 'https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png';
+    logo.src='https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png';
   };
 
-  img.src = isBase64 ? 'data:image/png;base64,' + base64data : srcUrl;
+  let bgImg = null;
+  const productImg = new Image();
+  productImg.crossOrigin='anonymous';
+  const tryDraw = () => { if(productImg.complete && productImg.naturalWidth) drawFinal(bgImg, productImg); };
+  if (bgBase64) {
+    bgImg = new Image();
+    bgImg.onload = tryDraw; bgImg.onerror = tryDraw;
+    bgImg.src = 'data:image/png;base64,' + bgBase64;
+  }
+  productImg.onload = () => {
+    if (!bgBase64 || (bgImg && bgImg.complete)) drawFinal(bgImg, productImg);
+    else if (bgImg) bgImg.onload = tryDraw;
+    else drawFinal(null, productImg);
+  };
+  productImg.onerror = () => drawFinal(bgImg, productImg);
+  productImg.src = productSrc;
+}
+
+function composeGeneratedImage(base64) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const W=1080, H=1080;
+  canvas.width=W; canvas.height=H;
+  const img = new Image();
+  img.onload = function() {
+    ctx.drawImage(img, 0, 0, W, H);
+    const strip = ctx.createLinearGradient(0, H*0.87, 0, H);
+    strip.addColorStop(0,'rgba(180,0,20,0)'); strip.addColorStop(1,'rgba(180,0,20,0.85)');
+    ctx.fillStyle=strip; ctx.fillRect(0,H*0.87,W,H*0.13);
+    ctx.font='700 54px "Bebas Neue", Impact, sans-serif';
+    ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(255,255,255,0.95)';
+    ctx.fillText('POWER',36,H*0.945);
+    const pw=ctx.measureText('POWER').width;
+    ctx.fillStyle='#ffcc00'; ctx.fillText('PRO',36+pw+6,H*0.945);
+    const logo=new Image(); logo.crossOrigin='anonymous';
+    const finalize=()=>{
+      const final=canvas.toDataURL('image/jpeg',0.95);
+      generatedImageBase64=final.split(',')[1];
+      document.getElementById('imgPreview').src=final;
+      document.getElementById('imgPreview').style.display='block';
+      document.getElementById('vkBtn').style.display='block';
+      document.getElementById('imgBtn').disabled=false;
+      document.getElementById('imgLoader').style.display='none';
+    };
+    logo.onload=function(){
+      const lw=W*0.26,lh=logo.height*(lw/logo.width);
+      ctx.globalAlpha=0.88; ctx.drawImage(logo,W-lw-28,H-lh-18,lw,lh); ctx.globalAlpha=1;
+      finalize();
+    };
+    logo.onerror=finalize;
+    logo.src='https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png';
+  };
+  img.src='data:image/png;base64,'+base64;
 }
 
 async function generateImage(){
-  document.getElementById('imgBtn').disabled = true;
-  document.getElementById('imgLoader').style.display = 'block';
-  document.getElementById('imgPreview').style.display = 'none';
-  document.getElementById('vkBtn').style.display = 'none';
-
-  const topic = document.getElementById('topic').value.trim();
-  const type  = document.getElementById('type').value;
-
-  // ← Передаём оба параметра для умного промпта на сервере
-  const promptText = `${topic} [type:${type}]`;
-
+  document.getElementById('imgBtn').disabled=true;
+  document.getElementById('imgLoader').style.display='block';
+  document.getElementById('imgPreview').style.display='none';
+  document.getElementById('vkBtn').style.display='none';
+  const topic=document.getElementById('topic').value.trim();
+  const type=document.getElementById('type').value;
+  const promptText=`${topic} [type:${type}]`;
   try{
-    const res = await fetch('/api/image', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ prompt: promptText })
-    });
-    const data = await res.json();
-
-    if(data.productImage){
-      addLogoToImage(data.productImage, false, null);
-      return;
+    const res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:promptText})});
+    const data=await res.json();
+    if(data.productImage && data.backgroundBase64){
+      composeImage(data.productImage, data.backgroundBase64);
+    } else if(data.productImage){
+      composeImage(data.productImage, null);
     } else if(data.artifacts && data.artifacts[0]){
-      addLogoToImage(null, true, data.artifacts[0].base64);
-      return;
+      composeGeneratedImage(data.artifacts[0].base64);
     } else {
-      throw new Error('Нет картинки в ответе: ' + JSON.stringify(data));
+      throw new Error('Нет картинки: '+JSON.stringify(data));
     }
-  } catch(e){
-    alert('Ошибка картинки: ' + e.message);
-    document.getElementById('imgBtn').disabled = false;
-    document.getElementById('imgLoader').style.display = 'none';
+  }catch(e){
+    alert('Ошибка: '+e.message);
+    document.getElementById('imgBtn').disabled=false;
+    document.getElementById('imgLoader').style.display='none';
   }
 }
 
 async function postToVK(){
   document.getElementById('vkBtn').disabled=true;
   const status=document.getElementById('vkStatus');
-  status.style.display='block';
-  status.className='status';
+  status.style.display='block'; status.className='status';
   status.textContent='Публикую в ВКонтакте...';
   try{
     const res=await fetch('/api/vk-post',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:vkPostText,imageBase64:generatedImageBase64})});
     const data=await res.json();
     if(data.response&&data.response.post_id){
       status.className='status status-ok';
-      status.textContent='✅ Пост опубликован в ВКонтакте! ID: '+data.response.post_id;
-    }else{
-      throw new Error(JSON.stringify(data));
-    }
+      status.textContent='✅ Пост опубликован! ID: '+data.response.post_id;
+    } else { throw new Error(JSON.stringify(data)); }
   }catch(e){
     status.className='status status-err';
     status.textContent='❌ Ошибка: '+e.message;
@@ -319,6 +306,5 @@ function copy(id){
   alert('Скопировано!');
 }
 </script>
-
 </body>
 </html>
