@@ -50,16 +50,10 @@ app.post('/api/image', async (req, res) => {
       })
     });
     const data = await response.json();
-const imageBase64 = data.artifacts[0].base64;
-const imageBuffer = Buffer.from(imageBase64, 'base64');
-const logoBuffer = await fetch('https://raw.githubusercontent.com/VityaGutsu09-prog/PowerPro-/main/4EBF0288-80E1-4910-9E9E-8E38456C1220.png').then(r => r.buffer());
-const finalImage = await sharp(imageBuffer)
-  .composite([{ input: logoBuffer, gravity: 'south' }])
-  .toBuffer();
-res.json({ artifacts: [{ base64: finalImage.toString('base64') }] });
- } catch(e) {res.status(500).json({ error: e.message });
-  }
-});
+res.json(data);
+} catch(e) {
+  res.status(500).json({ error: e.message });
+}
 
 app.post('/api/vk-post', async (req, res) => {
   try {
