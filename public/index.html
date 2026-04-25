@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
@@ -19,6 +18,7 @@
       --purple2: #a855f7;
       --green: #10b981;
       --blue: #3b82f6;
+      --red: #ef4444;
       --text: #f1f1f8;
       --muted: #5a5a7a;
       --radius: 12px;
@@ -26,173 +26,194 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
 
-```
-/* ── HEADER ── */
-header {
-  background: linear-gradient(90deg, #0a0a16, #120800);
-  border-bottom: 1px solid var(--border);
-  padding: 0 20px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.logo { font-family: 'Bebas Neue'; font-size: 26px; color: var(--accent); letter-spacing: 2px; text-shadow: 0 0 20px rgba(255,107,0,.4); }
-.logo span { color: var(--text); }
-.header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-.sw { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; font-family: 'Inter'; transition: all .2s; }
-.sw.active-orange { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
-.sw.active-green { background: var(--green); border-color: var(--green); color: #000; font-weight: 700; }
-.sw.active-blue { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 700; }
-.sep { width: 1px; height: 20px; background: var(--border); }
+    header { background: linear-gradient(90deg,#0a0a16,#120800); border-bottom: 1px solid var(--border); padding: 0 16px; height: 60px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+    .logo { font-family: 'Bebas Neue'; font-size: 24px; color: var(--accent); letter-spacing: 2px; text-shadow: 0 0 20px rgba(255,107,0,.5); }
+    .logo span { color: var(--text); }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .sw { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 11px; font-family: 'Inter'; font-weight: 600; transition: all .2s; }
+    .sw.active-orange { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .sw.active-green { background: var(--green); border-color: var(--green); color: #000; }
+    .sw.active-blue { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .sep { width: 1px; height: 20px; background: var(--border); }
 
-/* ── MAIN TABS ── */
-.tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; gap: 4px; }
-.tab { padding: 12px 18px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: none; font-family: 'Inter'; border-bottom: 2px solid transparent; transition: all .2s; }
-.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-.tab:hover:not(.active) { color: var(--text); }
+    .tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 16px; overflow-x: auto; }
+    .tab { padding: 12px 14px; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; border: none; background: none; font-family: 'Inter'; border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap; }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-/* ── LAYOUT ── */
-.page { display: none; }
-.page.active { display: block; }
-.split { display: flex; min-height: calc(100vh - 100px); }
-.sidebar { width: 280px; min-width: 280px; background: var(--surface); border-right: 1px solid var(--border); padding: 18px; }
-.content { flex: 1; padding: 20px; overflow-y: auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .split { display: flex; min-height: calc(100vh - 100px); }
+    .sidebar { width: 260px; min-width: 260px; background: var(--surface); border-right: 1px solid var(--border); padding: 16px; }
+    .content { flex: 1; padding: 16px; overflow-y: auto; }
 
-/* ── FORM ── */
-label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 5px; }
-input, select, textarea {
-  width: 100%; background: var(--card); border: 1px solid var(--border);
-  border-radius: 10px; color: var(--text); font-family: 'Inter'; font-size: 13px;
-  padding: 9px 12px; outline: none; transition: border-color .2s; margin-bottom: 14px;
-}
-input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-select option { background: var(--card); }
-textarea { resize: vertical; min-height: 70px; }
+    label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 5px; }
+    input, select { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Inter'; font-size: 13px; padding: 9px 12px; outline: none; transition: border-color .2s; margin-bottom: 12px; }
+    input:focus, select:focus { border-color: var(--accent); }
+    select option { background: var(--card); }
 
-/* ── BUTTONS ── */
-.btn { width: 100%; padding: 11px 16px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 700; font-size: 13px; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 7px; margin-bottom: 8px; }
-.btn-orange { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 4px 16px rgba(255,107,0,.25); }
-.btn-orange:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,107,0,.35); }
-.btn-purple { background: linear-gradient(135deg, var(--purple), var(--purple2)); color: #fff; box-shadow: 0 4px 16px rgba(124,58,237,.25); }
-.btn-purple:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,58,237,.35); }
-.btn-ghost { background: var(--card); border: 1px solid var(--border); color: var(--text); }
-.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-.btn-vk { background: #0077ff; color: #fff; }
-.btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
+    .btn { width: 100%; padding: 11px 16px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Inter'; font-weight: 700; font-size: 13px; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 7px; margin-bottom: 8px; }
+    .btn-orange { background: linear-gradient(135deg,var(--accent),var(--accent2)); color: #fff; box-shadow: 0 4px 16px rgba(255,107,0,.3); }
+    .btn-orange:hover { transform: translateY(-1px); }
+    .btn-purple { background: linear-gradient(135deg,var(--purple),var(--purple2)); color: #fff; box-shadow: 0 4px 16px rgba(124,58,237,.3); }
+    .btn-purple:hover { transform: translateY(-1px); }
+    .btn-green { background: linear-gradient(135deg,#059669,var(--green)); color: #fff; }
+    .btn-ghost { background: var(--card); border: 1px solid var(--border); color: var(--text); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-vk { background: #0077ff; color: #fff; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
 
-/* ── CARDS ── */
-.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
-.card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); }
-.card-body { font-size: 13px; line-height: 1.65; color: var(--text); white-space: pre-wrap; }
-.copy-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 3px 9px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: 'Inter'; transition: all .2s; }
-.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+    .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .card-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); }
+    .card-body { font-size: 13px; line-height: 1.7; color: var(--text); word-break: break-word; white-space: normal; }
+    .copy-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 3px 9px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: 'Inter'; transition: all .2s; }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ── PLATFORM TABS ── */
-.ptabs { display: flex; gap: 6px; margin-bottom: 14px; }
-.ptab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'Inter'; transition: all .2s; }
-.ptab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .ptabs { display: flex; gap: 6px; margin-bottom: 14px; }
+    .ptab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'Inter'; transition: all .2s; }
+    .ptab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-/* ── TREND SECTIONS ── */
-.trend-page { padding: 20px; }
-.trend-header { margin-bottom: 20px; }
-.trend-header h2 { font-family: 'Bebas Neue'; font-size: 26px; letter-spacing: 2px; color: var(--purple2); }
-.trend-header p { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    /* RATE BUTTONS */
+    .rate-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+    .rate-btn { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--card2); color: var(--muted); cursor: pointer; font-size: 13px; font-family: 'Inter'; font-weight: 700; transition: all .2s; }
+    .rate-btn:hover { transform: scale(1.1); }
+    .rate-btn.fire { border-color: var(--accent); color: var(--accent); }
+    .rate-btn.good { border-color: var(--green); color: var(--green); }
+    .rate-btn.bad { border-color: var(--red); color: var(--red); }
+    .rate-label { font-size: 11px; color: var(--muted); }
 
-.trend-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-.cty-btn { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 13px; cursor: pointer; font-family: 'Inter'; font-weight: 600; transition: all .2s; }
-.cty-btn.active { border-color: var(--purple); background: rgba(124,58,237,.15); color: var(--purple2); }
+    /* TRENDS */
+    .trend-page { padding: 16px; }
+    .trend-header { margin-bottom: 16px; }
+    .trend-header h2 { font-family: 'Bebas Neue'; font-size: 24px; letter-spacing: 2px; color: var(--purple2); }
+    .trend-header p { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .trend-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .cty-btn { padding: 7px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 12px; cursor: pointer; font-family: 'Inter'; font-weight: 600; transition: all .2s; }
+    .cty-btn.active { border-color: var(--purple); background: rgba(124,58,237,.15); color: var(--purple2); }
 
-/* Sections tabs */
-.section-tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
-.stab { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'Inter'; transition: all .2s; }
-.stab.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+    .section-tabs { display: flex; gap: 5px; margin-bottom: 16px; flex-wrap: wrap; }
+    .stab { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: none; color: var(--muted); font-family: 'Inter'; transition: all .2s; text-transform: uppercase; letter-spacing: .5px; }
+    .stab.active { background: var(--purple); border-color: var(--purple); color: #fff; }
 
-/* ── TOP PRODUCTS ── */
-.prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media(max-width:700px) { .prod-grid { grid-template-columns: 1fr; } }
-.prod-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; position: relative; transition: all .2s; cursor: pointer; }
-.prod-card:hover { border-color: var(--purple2); transform: translateY(-2px); }
-.prod-score { position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, var(--purple), var(--purple2)); color: #fff; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 20px; }
-.prod-name { font-size: 14px; font-weight: 700; margin-bottom: 5px; padding-right: 44px; }
-.prod-reason { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
-.prod-angle { font-size: 12px; color: var(--purple2); }
-.use-btn { display: block; width: 100%; margin-top: 10px; padding: 7px; background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.25); color: var(--purple2); border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Inter'; transition: all .2s; }
-.use-btn:hover { background: rgba(124,58,237,.25); }
+    .overview-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 16px; }
+    @media(max-width:600px) { .overview-grid { grid-template-columns: 1fr; } }
+    .overview-card { background: linear-gradient(135deg,rgba(124,58,237,.12),rgba(168,85,247,.05)); border: 1px solid rgba(124,58,237,.2); border-radius: var(--radius); padding: 14px; text-align: center; }
+    .overview-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--purple2); margin-bottom: 6px; font-weight: 700; }
+    .overview-value { font-size: 14px; font-weight: 700; }
 
-/* ── COMPETITORS ── */
-.comp-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
-.comp-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-.comp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.comp-block { background: var(--surface); border-radius: 8px; padding: 10px; }
-.comp-block-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
-.comp-block-label.red { color: #ef4444; }
-.comp-block-label.green { color: var(--green); }
-.comp-block-val { font-size: 12px; color: var(--text); line-height: 1.5; }
+    .prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:700px) { .prod-grid { grid-template-columns: 1fr; } }
+    .prod-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; position: relative; transition: all .2s; }
+    .prod-card:hover { border-color: var(--purple2); transform: translateY(-2px); }
+    .prod-score { position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg,var(--purple),var(--purple2)); color: #fff; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 20px; }
+    .prod-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; padding-right: 50px; }
+    .prod-reason { font-size: 12px; color: var(--muted); margin-bottom: 6px; line-height: 1.5; }
+    .prod-angle { font-size: 12px; color: var(--purple2); margin-bottom: 4px; }
+    .prod-action { font-size: 11px; color: var(--green); font-weight: 600; }
+    .use-btn { display: block; width: 100%; margin-top: 10px; padding: 7px; background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.25); color: var(--purple2); border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Inter'; transition: all .2s; }
+    .use-btn:hover { background: rgba(124,58,237,.25); }
 
-/* ── CONTENT THEMES ── */
-.theme-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; display: flex; gap: 14px; align-items: flex-start; }
-.theme-format { background: var(--purple); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
-.theme-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.theme-desc { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-.theme-example { font-size: 12px; color: var(--purple2); }
-.theme-use-btn { background: none; border: 1px solid rgba(124,58,237,.3); color: var(--purple2); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: 'Inter'; font-weight: 600; transition: all .2s; margin-top: 6px; }
-.theme-use-btn:hover { background: rgba(124,58,237,.15); }
+    .comp-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
+    .comp-name { font-size: 15px; font-weight: 800; margin-bottom: 10px; }
+    .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .comp-block { background: var(--surface); border-radius: 8px; padding: 10px; }
+    .comp-block-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
+    .comp-block-label.red { color: var(--red); }
+    .comp-block-label.green { color: var(--green); }
+    .comp-block-label.blue { color: var(--blue); }
+    .comp-block-val { font-size: 12px; line-height: 1.5; }
 
-/* ── POSTING SCHEDULE ── */
-.schedule-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
-@media(max-width:600px) { .schedule-grid { grid-template-columns: 1fr; } }
-.sched-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
-.sched-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
-.sched-value { font-size: 13px; font-weight: 600; color: var(--text); }
-.days-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-.day-badge { background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.25); color: var(--purple2); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-.time-badge { background: rgba(255,107,0,.12); border: 1px solid rgba(255,107,0,.2); color: var(--accent2); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .theme-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
+    .theme-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .theme-format { background: var(--purple); color: #fff; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+    .theme-title { font-size: 14px; font-weight: 700; }
+    .theme-why { font-size: 12px; color: var(--purple2); margin-bottom: 6px; }
+    .theme-hook { font-size: 12px; color: var(--accent2); font-style: italic; margin-bottom: 6px; }
+    .theme-example { font-size: 12px; color: var(--muted); }
+    .theme-use-btn { background: none; border: 1px solid rgba(124,58,237,.3); color: var(--purple2); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: 'Inter'; font-weight: 700; transition: all .2s; margin-top: 8px; }
+    .theme-use-btn:hover { background: rgba(124,58,237,.15); }
 
-/* ── HASHTAGS ── */
-.hash-section { margin-bottom: 14px; }
-.hash-cat { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-.hash-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
-.hash-tag { background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 4px 10px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all .2s; }
-.hash-tag:hover { border-color: var(--purple2); color: var(--purple2); }
+    .plan-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .plan-table th { background: rgba(124,58,237,.15); color: var(--purple2); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; padding: 8px 10px; text-align: left; }
+    .plan-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+    .plan-table tr:hover td { background: rgba(124,58,237,.05); }
+    .plan-day { font-weight: 700; color: var(--purple2); }
+    .plan-format { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; }
 
-/* ── SUMMARY ── */
-.summary-box { background: linear-gradient(135deg, rgba(124,58,237,.1), rgba(168,85,247,.05)); border: 1px solid rgba(124,58,237,.2); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
-.summary-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--purple2); margin-bottom: 8px; }
-.summary-text { font-size: 13px; line-height: 1.65; }
-.opportunity-box { background: linear-gradient(135deg, rgba(16,185,129,.1), rgba(5,150,105,.05)); border: 1px solid rgba(16,185,129,.2); border-radius: var(--radius); padding: 14px; }
-.opp-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--green); margin-bottom: 6px; }
+    .schedule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .sched-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+    .sched-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; font-weight: 700; }
+    .days-row { display: flex; gap: 5px; flex-wrap: wrap; }
+    .day-badge { background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.25); color: var(--purple2); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .time-badge { background: rgba(255,107,0,.1); border: 1px solid rgba(255,107,0,.2); color: var(--accent2); padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; margin-bottom: 5px; display: block; }
 
-/* ── LOADER ── */
-.loader { display: flex; align-items: center; gap: 10px; padding: 24px 0; color: var(--muted); font-size: 13px; }
-.spin { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--purple2); border-radius: 50%; animation: spin .7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+    .hash-section { margin-bottom: 16px; }
+    .hash-cat { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .hash-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+    .hash-tag { background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 4px 10px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all .2s; }
+    .hash-tag:hover { border-color: var(--purple2); color: var(--purple2); }
 
-/* ── IMAGE ── */
-#gen-image { width: 100%; border-radius: var(--radius); display: none; margin-bottom: 8px; }
+    .summary-box { background: linear-gradient(135deg,rgba(124,58,237,.1),rgba(168,85,247,.05)); border: 1px solid rgba(124,58,237,.2); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+    .summary-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--purple2); margin-bottom: 8px; }
+    .summary-text { font-size: 13px; line-height: 1.7; word-break: break-word; }
+    .opportunity-box { background: linear-gradient(135deg,rgba(16,185,129,.1),rgba(5,150,105,.05)); border: 1px solid rgba(16,185,129,.2); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
+    .opp-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--green); margin-bottom: 6px; }
+    .red-flag-box { background: linear-gradient(135deg,rgba(239,68,68,.1),rgba(220,38,38,.05)); border: 1px solid rgba(239,68,68,.2); border-radius: var(--radius); padding: 14px; margin-bottom: 16px; }
+    .red-flag-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--red); margin-bottom: 6px; }
 
-/* ── TOAST ── */
-.toast { position: fixed; bottom: 20px; right: 20px; background: var(--green); color: #000; padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: 13px; z-index: 999; opacity: 0; transform: translateY(8px); transition: all .3s; }
-.toast.show { opacity: 1; transform: translateY(0); }
+    /* LEARNING PAGE */
+    .learn-page { padding: 16px; }
+    .learn-header { margin-bottom: 20px; }
+    .learn-header h2 { font-family: 'Bebas Neue'; font-size: 24px; letter-spacing: 2px; color: var(--green); }
+    .learn-header p { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 20px; }
+    @media(max-width:600px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; }
+    .stat-value { font-family: 'Bebas Neue'; font-size: 28px; color: var(--accent); letter-spacing: 1px; }
+    .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-top: 2px; }
 
-/* Divider */
-.divider { width: 100%; height: 1px; background: var(--border); margin: 12px 0; }
-```
+    .learn-section { margin-bottom: 24px; }
+    .learn-section-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .learn-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
+    .top-post-card { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
+    .top-post-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+    .meta-badge { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+    .meta-badge.orange { border-color: rgba(255,107,0,.3); color: var(--accent); }
+    .meta-badge.green { border-color: rgba(16,185,129,.3); color: var(--green); }
+    .meta-badge.purple { border-color: rgba(168,85,247,.3); color: var(--purple2); }
+    .top-post-text { font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .post-stats-row { display: flex; gap: 12px; }
+    .post-stat { font-size: 11px; color: var(--muted); }
+    .post-stat span { color: var(--text); font-weight: 700; }
+
+    .hashtag-rank { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; }
+    .hashtag-rank-num { font-family: 'Bebas Neue'; font-size: 20px; color: var(--muted); width: 24px; }
+    .hashtag-name { flex: 1; font-size: 13px; font-weight: 600; color: var(--purple2); }
+    .hashtag-reach { font-size: 11px; color: var(--muted); }
+    .hashtag-bar { height: 4px; background: rgba(168,85,247,.15); border-radius: 2px; margin-top: 4px; }
+    .hashtag-bar-fill { height: 100%; background: linear-gradient(90deg,var(--purple),var(--purple2)); border-radius: 2px; }
+
+    .product-rank { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; }
+    .product-rank-name { flex: 1; font-size: 13px; font-weight: 600; }
+    .product-rank-reach { font-size: 12px; color: var(--green); font-weight: 700; }
+    .product-rank-posts { font-size: 11px; color: var(--muted); }
+
+    .loader { display: flex; align-items: center; gap: 10px; padding: 24px 0; color: var(--muted); font-size: 13px; }
+    .spin { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--purple2); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+    .spin-orange { border-top-color: var(--accent); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #gen-image { width: 100%; border-radius: var(--radius); display: none; margin-bottom: 8px; }
+    .divider { width: 100%; height: 1px; background: var(--border); margin: 12px 0; }
+    .toast { position: fixed; bottom: 20px; right: 20px; background: var(--green); color: #000; padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: 13px; z-index: 999; opacity: 0; transform: translateY(8px); transition: all .3s; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
-
 <header>
-  <div>
-    <div class="logo" id="logo-text">POWER<span>PRO</span></div>
-  </div>
+  <div class="logo" id="logo-text">POWER<span>PRO</span></div>
   <div class="header-right">
     <button class="sw active-orange" onclick="setBrand('powerpro',this)">⚡ PowerPro</button>
     <button class="sw" onclick="setBrand('fitwins',this)">🏆 FitWins</button>
@@ -203,169 +224,174 @@ textarea { resize: vertical; min-height: 70px; }
   </div>
 </header>
 
-<!-- ── MAIN TABS ── -->
-
 <div class="tabs">
   <button class="tab active" onclick="switchTab('generate',this)">✍️ Генерация</button>
   <button class="tab" onclick="switchTab('trends',this)">📈 Тренды</button>
+  <button class="tab" onclick="switchTab('learning',this);loadLearningStats()">🧠 Обучение</button>
 </div>
 
-<!-- ════════════════════════════════════════
-     GENERATE PAGE
-════════════════════════════════════════ -->
-
+<!-- GENERATE PAGE -->
 <div id="page-generate" class="page active">
   <div class="split">
     <aside class="sidebar">
-      <label>Продукт / Тема</label>
-      <select id="product-select" onchange="syncTopic(this)" style="margin-bottom:8px;">
-        <option value="">— выбери продукт —</option>
-        <option value="Протеин PowerPro">🥛 Протеин</option>
-        <option value="Гейнер PowerPro">💪 Гейнер</option>
-        <option value="Протеиновые батончики PowerPro">🍫 Батончики протеиновые</option>
+      <label>Продукт</label>
+      <select id="product-select" onchange="syncTopic(this)">
+        <option value="">— выбери —</option>
+        <option value="Протеин PowerPro ВЕЙ ШЕЙК">🥛 Протеин Whey</option>
+        <option value="Протеин PowerPro МИКС">💪 Протеин МИКС</option>
+        <option value="Протеин PowerPro ФЕМИН">👩 Протеин ФЕМИН</option>
+        <option value="Батончики PowerPro без сахара">🍫 Батончики</option>
+        <option value="Гейнер PowerPro">🏋️ Гейнер</option>
         <option value="custom">✏️ Своя тема</option>
       </select>
-      <input type="text" id="topic" placeholder="или введи свою тему..." />
-
-```
-  <label>Тип контента</label>
-  <select id="contentType">
-    <option value="Реклама / Акция">🔥 Реклама / Акция</option>
-    <option value="Польза / Инфо">📚 Польза / Инфо</option>
-    <option value="Мотивация">💪 Мотивация</option>
-    <option value="Обзор продукта">📦 Обзор продукта</option>
-    <option value="Трендовый контент">📈 Под тренд</option>
-  </select>
-
-  <button class="btn btn-orange" id="gen-btn" onclick="generateContent()">
-    ⚡ ГЕНЕРИРОВАТЬ ТЕКСТ
-  </button>
-
-  <div class="divider"></div>
-
-  <label>Стиль картинки</label>
-  <input type="text" id="imgStyle" placeholder="gym, minimalist, outdoor..." />
-  <button class="btn btn-ghost" id="img-btn" onclick="generateImage()">🎨 Генерировать картинку</button>
-  <img id="gen-image" alt="" />
-  <button class="btn btn-vk" id="vk-btn" onclick="publishVK()" style="display:none;">📤 Опубликовать в ВК</button>
-</aside>
-
-<main class="content">
-  <div id="gen-loader" class="loader" style="display:none;">
-    <div class="spin"></div> Генерирую контент под твою продукцию...
-  </div>
-  <div id="gen-results" style="display:none;">
-    <div class="ptabs">
-      <button class="ptab active" onclick="showPlatform('vk',this)">ВКонтакте</button>
-      <button class="ptab" onclick="showPlatform('ig',this)">Instagram</button>
-      <button class="ptab" onclick="showPlatform('tt',this)">TikTok</button>
-    </div>
-    <div id="p-vk">
-      <div class="card">
-        <div class="card-head"><span class="card-label">Пост ВКонтакте</span><button class="copy-btn" onclick="copy('vk-post')">Копировать</button></div>
-        <div class="card-body" id="vk-post"></div>
+      <label>Или своя тема</label>
+      <input type="text" id="topic" placeholder="Введи тему..." />
+      <label>Тип контента</label>
+      <select id="contentType">
+        <option value="Реклама / Акция">🔥 Реклама / Акция</option>
+        <option value="Польза / Инфо">📚 Польза / Инфо</option>
+        <option value="Мотивация">💪 Мотивация</option>
+        <option value="Обзор продукта">📦 Обзор продукта</option>
+        <option value="Трендовый контент">📈 Под тренд</option>
+      </select>
+      <button class="btn btn-orange" id="gen-btn" onclick="generateContent()">⚡ ГЕНЕРИРОВАТЬ</button>
+      <div class="divider"></div>
+      <label>Стиль картинки</label>
+      <input type="text" id="imgStyle" placeholder="gym / minimalist / outdoor..." />
+      <button class="btn btn-ghost" id="img-btn" onclick="generateImage()">🎨 Генерировать картинку</button>
+      <img id="gen-image" alt="" />
+      <button class="btn btn-vk" id="vk-btn" onclick="publishVK()" style="display:none;">📤 Опубликовать в ВК</button>
+    </aside>
+    <main class="content">
+      <div id="gen-loader" class="loader" style="display:none;">
+        <div class="spin spin-orange"></div> Генерирую контент...
       </div>
-      <div class="card">
-        <div class="card-head"><span class="card-label">Хэштеги</span><button class="copy-btn" onclick="copy('vk-tags')">Копировать</button></div>
-        <div class="card-body" id="vk-tags"></div>
+      <div id="gen-results" style="display:none;">
+        <div class="ptabs">
+          <button class="ptab active" onclick="showPlatform('vk',this)">ВКонтакте</button>
+          <button class="ptab" onclick="showPlatform('ig',this)">Instagram</button>
+          <button class="ptab" onclick="showPlatform('tt',this)">TikTok</button>
+        </div>
+        <div id="p-vk">
+          <div class="card">
+            <div class="card-head"><span class="card-label">Пост ВКонтакте</span><button class="copy-btn" onclick="copy('vk-post')">Копировать</button></div>
+            <div class="card-body" id="vk-post"></div>
+            <div class="rate-row">
+              <span class="rate-label">Оценить:</span>
+              <button class="rate-btn fire" onclick="ratePost(2)">🔥 Огонь</button>
+              <button class="rate-btn good" onclick="ratePost(1)">👍 Норм</button>
+              <button class="rate-btn bad" onclick="ratePost(-1)">👎 Слабо</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-label">Хэштеги ВК</span><button class="copy-btn" onclick="copy('vk-tags')">Копировать</button></div>
+            <div class="card-body" id="vk-tags"></div>
+          </div>
+        </div>
+        <div id="p-ig" style="display:none;">
+          <div class="card">
+            <div class="card-head"><span class="card-label">Instagram Caption</span><button class="copy-btn" onclick="copy('ig-cap')">Копировать</button></div>
+            <div class="card-body" id="ig-cap"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-label">Reels Сценарий</span><button class="copy-btn" onclick="copy('ig-reels')">Копировать</button></div>
+            <div class="card-body" id="ig-reels"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-label">Хэштеги Instagram</span><button class="copy-btn" onclick="copy('ig-tags')">Копировать</button></div>
+            <div class="card-body" id="ig-tags"></div>
+          </div>
+        </div>
+        <div id="p-tt" style="display:none;">
+          <div class="card">
+            <div class="card-head"><span class="card-label">TikTok</span><button class="copy-btn" onclick="copy('tt-text')">Копировать</button></div>
+            <div class="card-body" id="tt-text"></div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div id="p-ig" style="display:none;">
-      <div class="card">
-        <div class="card-head"><span class="card-label">Instagram Caption</span><button class="copy-btn" onclick="copy('ig-cap')">Копировать</button></div>
-        <div class="card-body" id="ig-cap"></div>
-      </div>
-      <div class="card">
-        <div class="card-head"><span class="card-label">Reels Сценарий</span><button class="copy-btn" onclick="copy('ig-reels')">Копировать</button></div>
-        <div class="card-body" id="ig-reels"></div>
-      </div>
-      <div class="card">
-        <div class="card-head"><span class="card-label">Хэштеги Instagram</span><button class="copy-btn" onclick="copy('ig-tags')">Копировать</button></div>
-        <div class="card-body" id="ig-tags"></div>
-      </div>
-    </div>
-    <div id="p-tt" style="display:none;">
-      <div class="card">
-        <div class="card-head"><span class="card-label">TikTok</span><button class="copy-btn" onclick="copy('tt-text')">Копировать</button></div>
-        <div class="card-body" id="tt-text"></div>
-      </div>
-    </div>
-  </div>
-</main>
-```
-
+    </main>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════
-     TRENDS PAGE
-════════════════════════════════════════ -->
-
+<!-- TRENDS PAGE -->
 <div id="page-trends" class="page">
   <div class="trend-page">
     <div class="trend-header">
-      <h2>📈 АНАЛИЗ ТРЕНДОВ</h2>
-      <p>Агент ищет в интернете что популярно в твоих категориях — Протеин, Гейнеры, Батончики</p>
+      <h2>📈 АНАЛИЗ РЫНКА</h2>
+      <p>Агент ищет реальные данные по твоим продуктам в интернете</p>
+    </div>
+    <div class="trend-controls">
+      <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);">СТРАНА:</span>
+      <button class="cty-btn active" onclick="setTrendCountry('ru',this)">🇷🇺 Россия</button>
+      <button class="cty-btn" onclick="setTrendCountry('ua',this)">🇺🇦 Украина</button>
+      <button class="cty-btn" onclick="setTrendCountry('th',this)">🇹🇭 Таиланд</button>
+      <button class="btn btn-purple" style="width:auto;margin:0;font-size:12px;padding:8px 16px;" onclick="analyzeTrends()">🔮 Анализировать рынок</button>
+    </div>
+    <div id="trend-loader" class="loader" style="display:none;">
+      <div class="spin"></div><span id="trend-loader-text">Агент ищет данные... (30-60 сек)</span>
+    </div>
+    <div id="trend-results" style="display:none;">
+      <div id="t-summary"></div>
+      <div class="section-tabs">
+        <button class="stab active" onclick="showSection('overview',this)">📊 Обзор</button>
+        <button class="stab" onclick="showSection('products',this)">🔥 Тренды</button>
+        <button class="stab" onclick="showSection('competitors',this)">🏆 Конкуренты</button>
+        <button class="stab" onclick="showSection('themes',this)">💡 Контент</button>
+        <button class="stab" onclick="showSection('plan',this)">📅 План</button>
+        <button class="stab" onclick="showSection('schedule',this)">⏰ Время</button>
+        <button class="stab" onclick="showSection('hashtags',this)"># Хэштеги</button>
+      </div>
+      <div id="s-overview"></div>
+      <div id="s-products" style="display:none;"><div class="prod-grid" id="prod-grid"></div></div>
+      <div id="s-competitors" style="display:none;"><div id="comp-list"></div></div>
+      <div id="s-themes" style="display:none;"><div id="themes-list"></div></div>
+      <div id="s-plan" style="display:none;"><div id="plan-content"></div></div>
+      <div id="s-schedule" style="display:none;"><div id="sched-content"></div></div>
+      <div id="s-hashtags" style="display:none;"><div id="hash-content"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LEARNING PAGE -->
+<div id="page-learning" class="page">
+  <div class="learn-page">
+    <div class="learn-header">
+      <h2>🧠 ОБУЧЕНИЕ АГЕНТА</h2>
+      <p>Агент учится на реальных результатах — чем больше постов, тем умнее генерация</p>
     </div>
 
-```
-<div class="trend-controls">
-  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);">СТРАНА:</span>
-  <button class="cty-btn active" id="tc-ru" onclick="setTrendCountry('ru',this)">🇷🇺 Россия</button>
-  <button class="cty-btn" id="tc-ua" onclick="setTrendCountry('ua',this)">🇺🇦 Украина</button>
-  <button class="cty-btn" id="tc-th" onclick="setTrendCountry('th',this)">🇹🇭 Таиланд</button>
-  <button class="btn btn-purple" style="width:auto;margin:0;font-size:13px;" onclick="analyzeTrends()">
-    🔮 Анализировать рынок
-  </button>
-</div>
+    <div id="learn-loader" class="loader" style="display:none;">
+      <div class="spin spin-orange"></div> Загружаю статистику...
+    </div>
 
-<div id="trend-loader" class="loader" style="display:none;">
-  <div class="spin"></div>
-  <span id="trend-loader-text">Агент ищет тренды в интернете... (20-40 сек)</span>
-</div>
+    <div id="learn-content" style="display:none;">
+      <div class="stats-grid" id="stats-grid"></div>
 
-<div id="trend-results" style="display:none;">
+      <div class="learn-section">
+        <div class="learn-section-title">🏆 Топ постов по охвату</div>
+        <div id="top-posts-list"></div>
+      </div>
 
-  <!-- Summary + Opportunity -->
-  <div id="t-summary"></div>
+      <div class="learn-section">
+        <div class="learn-section-title">📦 Топ продуктов по охвату</div>
+        <div id="top-products-list"></div>
+      </div>
 
-  <!-- Section Tabs -->
-  <div class="section-tabs">
-    <button class="stab active" onclick="showSection('products',this)">📦 Топ продуктов</button>
-    <button class="stab" onclick="showSection('competitors',this)">🏆 Конкуренты</button>
-    <button class="stab" onclick="showSection('themes',this)">💡 Темы контента</button>
-    <button class="stab" onclick="showSection('schedule',this)">⏰ Расписание</button>
-    <button class="stab" onclick="showSection('hashtags',this)"># Хэштеги</button>
-  </div>
+      <div class="learn-section">
+        <div class="learn-section-title"># Топ хэштегов по охвату</div>
+        <div id="top-hashtags-list"></div>
+      </div>
 
-  <!-- TOP PRODUCTS -->
-  <div id="s-products">
-    <div class="prod-grid" id="prod-grid"></div>
-  </div>
+      <div style="margin-top:16px;">
+        <button class="btn btn-green" onclick="loadLearningStats()">🔄 Обновить статистику</button>
+      </div>
+    </div>
 
-  <!-- COMPETITORS -->
-  <div id="s-competitors" style="display:none;">
-    <div id="comp-list"></div>
-  </div>
-
-  <!-- CONTENT THEMES -->
-  <div id="s-themes" style="display:none;">
-    <div id="themes-list"></div>
-  </div>
-
-  <!-- SCHEDULE -->
-  <div id="s-schedule" style="display:none;">
-    <div class="schedule-grid" id="sched-grid"></div>
-  </div>
-
-  <!-- HASHTAGS -->
-  <div id="s-hashtags" style="display:none;">
-    <div id="hash-content"></div>
-  </div>
-
-</div>
-```
-
+    <div id="learn-empty" style="display:none;text-align:center;padding:40px 20px;">
+      <div style="font-size:48px;margin-bottom:12px;">🧠</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px;">База знаний пуста</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">Генерируй и публикуй посты — агент будет учиться на их результатах и становиться умнее с каждым постом</div>
+    </div>
   </div>
 </div>
 
@@ -377,34 +403,26 @@ textarea { resize: vertical; min-height: 70px; }
   let trendCountry = 'ru';
   let lastVKText = '';
   let lastImage = null;
+  let currentLearningId = null;
 
-  const brandData = {
-    powerpro: { label: 'PowerPro', logo: 'POWER<span>PRO</span>' },
-    fitwins:  { label: 'FitWins',  logo: 'FIT<span>WINS</span>' },
-  };
-
-  // ── SWITCHERS ──────────────────────────────────────────────────────────────
   function setBrand(b, btn) {
     brand = b;
-    const brandBtns = document.querySelectorAll('.header-right .sw:nth-child(1), .header-right .sw:nth-child(2)');
-    brandBtns.forEach(x => x.classList.remove('active-orange','active-green'));
+    document.querySelectorAll('.header-right .sw').forEach(x => x.classList.remove('active-orange','active-green'));
+    btn.classList.add(b === 'fitwins' ? 'active-green' : 'active-orange');
     if (b === 'fitwins') {
-      btn.classList.add('active-green');
       document.documentElement.style.setProperty('--accent','#10b981');
       document.documentElement.style.setProperty('--accent2','#34d399');
+      document.getElementById('logo-text').innerHTML = 'FIT<span>WINS</span>';
     } else {
-      btn.classList.add('active-orange');
       document.documentElement.style.setProperty('--accent','#ff6b00');
       document.documentElement.style.setProperty('--accent2','#ffaa00');
+      document.getElementById('logo-text').innerHTML = 'POWER<span>PRO</span>';
     }
-    document.getElementById('logo-text').innerHTML = brandData[b].logo;
-    updateProductOptions();
   }
 
   function setCountry(c, btn) {
     country = c;
-    const cBtns = [...document.querySelectorAll('.header-right .sw')].slice(2);
-    cBtns.forEach(x => x.classList.remove('active-blue'));
+    document.querySelectorAll('.header-right .sw').forEach(x => x.classList.remove('active-blue'));
     btn.classList.add('active-blue');
   }
 
@@ -414,27 +432,11 @@ textarea { resize: vertical; min-height: 70px; }
     btn.classList.add('active');
   }
 
-  function updateProductOptions() {
-    const sel = document.getElementById('product-select');
-    const bLabel = brandData[brand].label;
-    sel.options[1].value = `Протеин ${bLabel}`;
-    sel.options[1].text  = `🥛 Протеин ${bLabel}`;
-    sel.options[2].value = `Гейнер ${bLabel}`;
-    sel.options[2].text  = `💪 Гейнер ${bLabel}`;
-    sel.options[3].value = `Протеиновые батончики ${bLabel}`;
-    sel.options[3].text  = `🍫 Батончики ${bLabel}`;
-  }
-
   function syncTopic(sel) {
-    if (sel.value && sel.value !== 'custom') {
-      document.getElementById('topic').value = sel.value;
-    } else if (sel.value === 'custom') {
-      document.getElementById('topic').value = '';
-      document.getElementById('topic').focus();
-    }
+    if (sel.value && sel.value !== 'custom') document.getElementById('topic').value = sel.value;
+    else if (sel.value === 'custom') { document.getElementById('topic').value = ''; document.getElementById('topic').focus(); }
   }
 
-  // ── TAB SWITCH ─────────────────────────────────────────────────────────────
   function switchTab(name, btn) {
     document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -445,61 +447,67 @@ textarea { resize: vertical; min-height: 70px; }
   function showPlatform(p, btn) {
     document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    ['vk','ig','tt'].forEach(id => document.getElementById('p-' + id).style.display = id === p ? 'block' : 'none');
+    ['vk','ig','tt'].forEach(id => document.getElementById('p-'+id).style.display = id===p?'block':'none');
   }
 
   function showSection(s, btn) {
     document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    ['products','competitors','themes','schedule','hashtags'].forEach(id => {
-      document.getElementById('s-' + id).style.display = id === s ? 'block' : 'none';
+    ['overview','products','competitors','themes','plan','schedule','hashtags'].forEach(id => {
+      document.getElementById('s-'+id).style.display = id===s?'block':'none';
     });
   }
 
-  // ── GENERATE ───────────────────────────────────────────────────────────────
   async function generateContent() {
     const topic = document.getElementById('topic').value.trim();
     if (!topic) { toast('⚠️ Выбери продукт или введи тему'); return; }
-
     const btn = document.getElementById('gen-btn');
     btn.disabled = true;
     document.getElementById('gen-loader').style.display = 'flex';
     document.getElementById('gen-results').style.display = 'none';
-
     try {
       const res = await fetch('/api/generate', {
         method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ topic, contentType: document.getElementById('contentType').value, brand, country, lang: country === 'ua' ? 'uk' : country }),
+        body: JSON.stringify({ topic, contentType: document.getElementById('contentType').value, brand, country, lang: country==='ua'?'uk':country }),
       });
       const d = await res.json();
       if (d.error) throw new Error(d.error);
 
+      currentLearningId = d.learning_id;
+
       document.getElementById('vk-post').textContent = d.vk_post || '';
       document.getElementById('vk-tags').textContent = d.vk_hashtags || '';
-      document.getElementById('ig-cap').textContent  = d.ig_caption || '';
-      document.getElementById('ig-reels').textContent= d.ig_reels || '';
+      document.getElementById('ig-cap').textContent = d.ig_caption || '';
+      document.getElementById('ig-reels').textContent = d.ig_reels || '';
       document.getElementById('ig-tags').textContent = d.ig_hashtags || '';
       document.getElementById('tt-text').textContent = d.tiktok || '';
 
-      lastVKText = (d.vk_post || '') + '\n\n' + (d.vk_hashtags || '');
+      lastVKText = (d.vk_post||'') + '\n\n' + (d.vk_hashtags||'');
       document.getElementById('gen-results').style.display = 'block';
       toast('✅ Готово!');
-    } catch(e) { toast('❌ ' + e.message); }
-    finally {
-      btn.disabled = false;
-      document.getElementById('gen-loader').style.display = 'none';
-    }
+    } catch(e) { toast('❌ '+e.message); }
+    finally { btn.disabled = false; document.getElementById('gen-loader').style.display = 'none'; }
   }
 
-  // ── IMAGE ──────────────────────────────────────────────────────────────────
+  async function ratePost(score) {
+    if (!currentLearningId) { toast('⚠️ Сначала сгенерируй пост'); return; }
+    try {
+      await fetch('/api/rate', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ postId: currentLearningId, score }),
+      });
+      const labels = { 2: '🔥 Огонь сохранён!', 1: '👍 Оценка сохранена!', '-1': '👎 Учтём — будем лучше!' };
+      toast(labels[score] || 'Оценка сохранена!');
+    } catch(e) { toast('❌ '+e.message); }
+  }
+
   async function generateImage() {
-    const topic = document.getElementById('topic').value || 'protein supplement';
     const btn = document.getElementById('img-btn');
     btn.disabled = true; btn.textContent = '⏳ Генерирую...';
     try {
       const res = await fetch('/api/generate-image', {
         method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ topic, style: document.getElementById('imgStyle').value, brand }),
+        body: JSON.stringify({ topic: document.getElementById('topic').value||'protein', style: document.getElementById('imgStyle').value, brand, country }),
       });
       const d = await res.json();
       if (d.error) throw new Error(d.error);
@@ -508,44 +516,127 @@ textarea { resize: vertical; min-height: 70px; }
       img.src = d.image; img.style.display = 'block';
       document.getElementById('vk-btn').style.display = 'flex';
       toast('🎨 Картинка готова!');
-    } catch(e) { toast('❌ ' + e.message); }
+    } catch(e) { toast('❌ '+e.message); }
     finally { btn.disabled = false; btn.textContent = '🎨 Генерировать картинку'; }
   }
 
-  // ── PUBLISH VK ─────────────────────────────────────────────────────────────
   async function publishVK() {
     const btn = document.getElementById('vk-btn');
     btn.disabled = true; btn.textContent = '📤 Публикую...';
     try {
       const res = await fetch('/api/publish-vk', {
         method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ text: lastVKText, imageBase64: lastImage }),
+        body: JSON.stringify({ text: lastVKText, imageBase64: lastImage, learningId: currentLearningId }),
       });
       const d = await res.json();
       if (d.error) throw new Error(d.error);
-      toast('✅ Опубликовано в ВК!');
-    } catch(e) { toast('❌ ' + e.message); }
+      toast('✅ Опубликовано в ВК! Статистика подтянется через 24ч');
+    } catch(e) { toast('❌ '+e.message); }
     finally { btn.disabled = false; btn.textContent = '📤 Опубликовать в ВК'; }
   }
 
-  // ── ANALYZE TRENDS ─────────────────────────────────────────────────────────
+  async function loadLearningStats() {
+    document.getElementById('learn-loader').style.display = 'flex';
+    document.getElementById('learn-content').style.display = 'none';
+    document.getElementById('learn-empty').style.display = 'none';
+    try {
+      const res = await fetch(`/api/learning-stats?brand=${brand}&country=${country}`);
+      const d = await res.json();
+
+      if (d.total_posts === 0) {
+        document.getElementById('learn-empty').style.display = 'block';
+        return;
+      }
+
+      // Stats grid
+      document.getElementById('stats-grid').innerHTML = `
+        <div class="stat-card"><div class="stat-value">${d.total_posts}</div><div class="stat-label">Всего постов</div></div>
+        <div class="stat-card"><div class="stat-value">${(d.total_reach||0).toLocaleString()}</div><div class="stat-label">Суммарный охват</div></div>
+        <div class="stat-card"><div class="stat-value">${d.avg_likes||0}</div><div class="stat-label">Среднее лайков</div></div>
+        <div class="stat-card"><div class="stat-value">${d.top_hashtags?.length||0}</div><div class="stat-label">Изучено хэштегов</div></div>
+      `;
+
+      // Top posts
+      const tpl = document.getElementById('top-posts-list');
+      tpl.innerHTML = '';
+      if (d.top_posts?.length) {
+        d.top_posts.forEach((p, i) => {
+          tpl.innerHTML += `
+            <div class="top-post-card">
+              <div class="top-post-meta">
+                <span class="meta-badge purple">#${i+1}</span>
+                <span class="meta-badge orange">⚡ ${p.score || 0} очков</span>
+                <span class="meta-badge green">👁 ${(p.vk_stats?.reach||0).toLocaleString()} охват</span>
+                <span class="meta-badge">❤️ ${p.vk_stats?.likes||0}</span>
+                <span class="meta-badge">${p.topic||'—'}</span>
+              </div>
+              <div class="top-post-text">${p.vk_post||'—'}</div>
+              <div class="post-stats-row">
+                <div class="post-stat">Тип: <span>${p.contentType||'—'}</span></div>
+                <div class="post-stat">Репосты: <span>${p.vk_stats?.reposts||0}</span></div>
+                <div class="post-stat">Комменты: <span>${p.vk_stats?.comments||0}</span></div>
+              </div>
+            </div>
+          `;
+        });
+      } else {
+        tpl.innerHTML = '<p style="color:var(--muted);font-size:13px;">Постов с оценками пока нет</p>';
+      }
+
+      // Top products
+      const tprl = document.getElementById('top-products-list');
+      tprl.innerHTML = '';
+      if (d.top_products?.length) {
+        d.top_products.forEach((p, i) => {
+          tprl.innerHTML += `
+            <div class="product-rank">
+              <div style="font-family:'Bebas Neue';font-size:20px;color:var(--muted);width:24px;">${i+1}</div>
+              <div class="product-rank-name">${p.name}</div>
+              <div class="product-rank-posts">${p.posts} постов</div>
+              <div class="product-rank-reach">👁 ${(p.total_reach||0).toLocaleString()}</div>
+            </div>
+          `;
+        });
+      } else {
+        tprl.innerHTML = '<p style="color:var(--muted);font-size:13px;">Публикуй посты — появится статистика по продуктам</p>';
+      }
+
+      // Top hashtags
+      const thl = document.getElementById('top-hashtags-list');
+      thl.innerHTML = '';
+      const maxReach = d.top_hashtags?.[0]?.reach || 1;
+      if (d.top_hashtags?.length) {
+        d.top_hashtags.forEach((h, i) => {
+          const pct = Math.round((h.reach / maxReach) * 100);
+          thl.innerHTML += `
+            <div class="hashtag-rank">
+              <div class="hashtag-rank-num">${i+1}</div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                  <span class="hashtag-name">${h.tag}</span>
+                  <span class="hashtag-reach">охват ~${(h.reach||0).toLocaleString()} · ${h.uses||0} раз</span>
+                </div>
+                <div class="hashtag-bar"><div class="hashtag-bar-fill" style="width:${pct}%"></div></div>
+              </div>
+            </div>
+          `;
+        });
+      } else {
+        thl.innerHTML = '<p style="color:var(--muted);font-size:13px;">Хэштеги появятся после публикаций в ВК</p>';
+      }
+
+      document.getElementById('learn-content').style.display = 'block';
+    } catch(e) { toast('❌ '+e.message); }
+    finally { document.getElementById('learn-loader').style.display = 'none'; }
+  }
+
   async function analyzeTrends() {
     document.getElementById('trend-loader').style.display = 'flex';
     document.getElementById('trend-results').style.display = 'none';
-
-    const msgs = [
-      'Агент ищет тренды в интернете...',
-      'Анализирую конкурентов...',
-      'Собираю хэштеги и расписание...',
-      'Финализирую отчёт...',
-    ];
+    const msgs = ['Ищу тренды в интернете...','Анализирую конкурентов...','Строю контент-план...','Собираю хэштеги...','Финализирую отчёт...'];
     let mi = 0;
-    const loaderText = document.getElementById('trend-loader-text');
-    const loaderInterval = setInterval(() => {
-      mi = (mi + 1) % msgs.length;
-      loaderText.textContent = msgs[mi] + ' (20-40 сек)';
-    }, 7000);
-
+    const lt = document.getElementById('trend-loader-text');
+    const iv = setInterval(() => { lt.textContent = msgs[++mi % msgs.length] + ' (30-60 сек)'; }, 9000);
     try {
       const res = await fetch('/api/trends', {
         method: 'POST', headers: {'Content-Type':'application/json'},
@@ -553,161 +644,74 @@ textarea { resize: vertical; min-height: 70px; }
       });
       const d = await res.json();
       if (d.error && !d.top_products) throw new Error(d.error);
-
       renderTrends(d);
       document.getElementById('trend-results').style.display = 'block';
       toast('📈 Анализ готов!');
-    } catch(e) { toast('❌ ' + e.message); }
-    finally {
-      clearInterval(loaderInterval);
-      document.getElementById('trend-loader').style.display = 'none';
-    }
+    } catch(e) { toast('❌ '+e.message); }
+    finally { clearInterval(iv); document.getElementById('trend-loader').style.display = 'none'; }
   }
 
   function renderTrends(d) {
-    // ── Summary
     document.getElementById('t-summary').innerHTML = `
-      <div class="summary-box" style="margin-bottom:12px;">
-        <div class="summary-title">📊 Общая картина рынка</div>
-        <div class="summary-text">${d.summary || '—'}</div>
-      </div>
-      ${d.opportunity ? `<div class="opportunity-box" style="margin-bottom:18px;">
-        <div class="opp-label">🚀 Главная возможность прямо сейчас</div>
-        <div style="font-size:13px;line-height:1.6;">${d.opportunity}</div>
-      </div>` : ''}
+      <div class="summary-box"><div class="summary-title">📊 Вывод по рынку</div><div class="summary-text">${d.summary||'—'}</div></div>
+      ${d.opportunity?`<div class="opportunity-box"><div class="opp-label">🚀 Главная возможность</div><div style="font-size:13px;line-height:1.7;">${d.opportunity}</div></div>`:''}
+      ${d.red_flags?`<div class="red-flag-box"><div class="red-flag-label">🚫 Что НЕ делать</div><div style="font-size:13px;line-height:1.7;">${d.red_flags}</div></div>`:''}
     `;
-
-    // ── Top products
+    const mo = d.market_overview||{};
+    document.getElementById('s-overview').innerHTML = `
+      <div class="overview-grid">
+        <div class="overview-card"><div class="overview-label">📦 Объём рынка</div><div class="overview-value">${mo.size||'—'}</div></div>
+        <div class="overview-card"><div class="overview-label">📈 Рост</div><div class="overview-value">${mo.growth||'—'}</div></div>
+        <div class="overview-card"><div class="overview-label">💡 Инсайт</div><div class="overview-value" style="font-size:12px;">${mo.key_insight||'—'}</div></div>
+      </div>
+      ${d.opportunity?`<div class="opportunity-box"><div class="opp-label">🚀 Главная возможность</div><div style="font-size:13px;line-height:1.7;">${d.opportunity}</div></div>`:''}
+      ${d.red_flags?`<div class="red-flag-box"><div class="red-flag-label">🚫 Что НЕ делать</div><div style="font-size:13px;line-height:1.7;">${d.red_flags}</div></div>`:''}
+    `;
     const pg = document.getElementById('prod-grid');
     pg.innerHTML = '';
-    (d.top_products || []).forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'prod-card';
-      card.innerHTML = `
-        <div class="prod-score">🔥 ${p.score || 0}</div>
-        <div class="prod-name">${p.product || ''}</div>
-        <div class="prod-reason">${p.trend_reason || ''}</div>
-        <div class="prod-angle">💡 ${p.our_angle || ''}</div>
-        <button class="use-btn" onclick="useTopic('${encodeURIComponent(p.product)}')">
-          ✍️ Создать контент под это →
-        </button>
-      `;
-      pg.appendChild(card);
+    (d.top_products||[]).forEach(p => {
+      const c = document.createElement('div');
+      c.className = 'prod-card';
+      c.innerHTML = `<div class="prod-score">🔥${p.score||0}</div><div class="prod-name">${p.product||''}</div><div class="prod-reason">${p.trend_reason||''}</div><div class="prod-angle">💡 ${p.our_angle||''}</div>${p.action?`<div class="prod-action">▶ ${p.action}</div>`:''}<button class="use-btn" onclick="useTopic('${encodeURIComponent(p.product)}')">✍️ Создать контент →</button>`;
+      pg.appendChild(c);
     });
-
-    // ── Competitors
     const cl = document.getElementById('comp-list');
     cl.innerHTML = '';
-    (d.competitors || []).forEach(c => {
-      cl.innerHTML += `
-        <div class="comp-card">
-          <div class="comp-name">🏢 ${c.name || ''}</div>
-          <div class="comp-row">
-            <div class="comp-block">
-              <div class="comp-block-label red">⚔️ Их сильные стороны</div>
-              <div class="comp-block-val">${c.strengths || '—'}</div>
-            </div>
-            <div class="comp-block">
-              <div class="comp-block-label green">✅ Наше преимущество</div>
-              <div class="comp-block-val">${c.weakness || '—'}</div>
-            </div>
-          </div>
-        </div>
-      `;
+    (d.competitors||[]).forEach(c => {
+      cl.innerHTML += `<div class="comp-card"><div class="comp-name">🏢 ${c.name||''}</div><div class="comp-grid"><div class="comp-block"><div class="comp-block-label red">⚔️ Их сила</div><div class="comp-block-val">${c.strengths||'—'}</div></div><div class="comp-block"><div class="comp-block-label green">✅ Наше преимущество</div><div class="comp-block-val">${c.our_advantage||c.weakness||'—'}</div></div><div class="comp-block"><div class="comp-block-label red">🎯 Их слабость</div><div class="comp-block-val">${c.weakness||'—'}</div></div><div class="comp-block"><div class="comp-block-label blue">💰 Цены</div><div class="comp-block-val">${c.price_compare||'—'}</div></div></div></div>`;
     });
-
-    // ── Content themes
     const tl = document.getElementById('themes-list');
     tl.innerHTML = '';
-    (d.content_themes || []).forEach(t => {
-      tl.innerHTML += `
-        <div class="theme-card">
-          <div style="padding-top:2px;">
-            <span class="theme-format">${t.format || 'Пост'}</span>
-          </div>
-          <div>
-            <div class="theme-title">${t.theme || ''}</div>
-            <div class="theme-desc">${t.description || ''}</div>
-            <div class="theme-example">💬 Пример: ${t.example_topic || ''}</div>
-            <button class="theme-use-btn" onclick="useTopic('${encodeURIComponent(t.example_topic || t.theme)}')">
-              ✍️ Создать контент
-            </button>
-          </div>
-        </div>
-      `;
+    (d.content_themes||[]).forEach(t => {
+      tl.innerHTML += `<div class="theme-card"><div class="theme-top"><span class="theme-format">${t.format||'Пост'}</span><div class="theme-title">${t.theme||''}</div></div>${t.why_works?`<div class="theme-why">💜 ${t.why_works}</div>`:''} ${t.hook?`<div class="theme-hook">💬 "${t.hook}"</div>`:''} ${t.example_topic?`<div class="theme-example">📝 ${t.example_topic}</div>`:''}<button class="theme-use-btn" onclick="useTopic('${encodeURIComponent(t.example_topic||t.theme)}')">✍️ Создать контент</button></div>`;
     });
-
-    // ── Schedule
-    const sch = d.posting_schedule || {};
-    document.getElementById('sched-grid').innerHTML = `
-      <div class="sched-card">
-        <div class="sched-label">📅 Лучшие дни</div>
-        <div class="days-row">
-          ${(sch.best_days || []).map(d => `<span class="day-badge">${d}</span>`).join('')}
-        </div>
-      </div>
-      <div class="sched-card">
-        <div class="sched-label">⏰ Лучшее время</div>
-        <div class="days-row">
-          ${(sch.best_times || []).map(t => `<span class="time-badge">${t}</span>`).join('')}
-        </div>
-      </div>
-      <div class="sched-card">
-        <div class="sched-label">🔄 Частота</div>
-        <div class="sched-value">${sch.frequency || '—'}</div>
-      </div>
-    `;
-
-    // ── Hashtags
+    const plan = d.content_plan||[];
+    document.getElementById('plan-content').innerHTML = plan.length ? `<div style="overflow-x:auto;"><table class="plan-table"><thead><tr><th>День</th><th>Тема</th><th>Продукт</th><th>Формат</th><th>Хук</th><th></th></tr></thead><tbody>${plan.map(p=>`<tr><td><span class="plan-day">${p.day||''}</span></td><td>${p.theme||''}</td><td style="color:var(--purple2);font-size:11px;">${p.product||''}</td><td><span class="plan-format">${p.format||''}</span></td><td style="color:var(--accent2);font-style:italic;font-size:11px;">${p.hook||''}</td><td><button class="theme-use-btn" onclick="useTopic('${encodeURIComponent(p.theme)}')">→</button></td></tr>`).join('')}</tbody></table></div>` : '<p style="color:var(--muted);">Контент-план не сформирован</p>';
+    const sch = d.posting_schedule||{};
+    document.getElementById('sched-content').innerHTML = `<div class="schedule-grid"><div class="sched-card"><div class="sched-label">📅 Лучшие дни</div><div class="days-row">${(sch.best_days||[]).map(d=>`<span class="day-badge">${d}</span>`).join('')}</div></div><div class="sched-card"><div class="sched-label">🏆 Платформы</div><div style="font-size:12px;line-height:1.6;margin-top:4px;">${sch.platform_priority||'—'}</div></div></div><div class="sched-card" style="margin-bottom:10px;"><div class="sched-label">⏰ Лучшее время</div><div style="margin-top:4px;">${(sch.best_times||[]).map(t=>`<span class="time-badge">${t}</span>`).join('')}</div></div><div class="sched-card"><div class="sched-label">🔄 Стратегия</div><div style="font-size:13px;line-height:1.6;margin-top:4px;">${sch.frequency||'—'}</div></div>`;
     const hc = document.getElementById('hash-content');
     hc.innerHTML = '';
-    const tags = d.hashtags || {};
-    const catLabels = { protein: '🥛 Протеин', gainer: '💪 Гейнер', bars: '🍫 Батончики', brand: '🏷️ Бренд' };
-    Object.entries(tags).forEach(([cat, arr]) => {
-      const allTags = (arr || []).join(' ');
-      hc.innerHTML += `
-        <div class="hash-section">
-          <div class="hash-cat">
-            ${catLabels[cat] || cat}
-            <button class="copy-btn" onclick="copyRaw('${encodeURIComponent(allTags)}')">Копировать все</button>
-          </div>
-          <div class="hash-wrap">
-            ${(arr || []).map(h => `<span class="hash-tag" onclick="copyRaw('${encodeURIComponent(h)}')">${h}</span>`).join('')}
-          </div>
-        </div>
-      `;
+    const labels = {protein:'🥛 Протеин',bars:'🍫 Батончики',fitness:'💪 Фитнес',brand:'🏷️ Бренд',gainer:'🏋️ Гейнер'};
+    Object.entries(d.hashtags||{}).forEach(([cat,arr]) => {
+      const all = (arr||[]).join(' ');
+      hc.innerHTML += `<div class="hash-section"><div class="hash-cat">${labels[cat]||cat}<button class="copy-btn" onclick="copyRaw('${encodeURIComponent(all)}')">Копировать все</button></div><div class="hash-wrap">${(arr||[]).map(h=>`<span class="hash-tag" onclick="copyRaw('${encodeURIComponent(h)}')">${h}</span>`).join('')}</div></div>`;
     });
   }
 
-  // ── USE TOPIC ──────────────────────────────────────────────────────────────
   function useTopic(encoded) {
-    const topic = decodeURIComponent(encoded);
-    document.getElementById('topic').value = topic;
+    document.getElementById('topic').value = decodeURIComponent(encoded);
     document.getElementById('contentType').value = 'Трендовый контент';
     switchTab('generate', document.querySelector('.tab'));
-    document.querySelector('.tab').classList.add('active');
     toast('✅ Тема загружена! Жми генерировать 🚀');
   }
 
-  // ── UTILS ──────────────────────────────────────────────────────────────────
-  function copy(id) {
-    navigator.clipboard.writeText(document.getElementById(id).textContent);
-    toast('Скопировано!');
-  }
-  function copyRaw(encoded) {
-    navigator.clipboard.writeText(decodeURIComponent(encoded));
-    toast('Скопировано!');
-  }
+  function copy(id) { navigator.clipboard.writeText(document.getElementById(id).textContent); toast('Скопировано!'); }
+  function copyRaw(e) { navigator.clipboard.writeText(decodeURIComponent(e)); toast('Скопировано!'); }
   function toast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2800);
   }
-
-  // init
-  updateProductOptions();
 </script>
-
 </body>
 </html>
